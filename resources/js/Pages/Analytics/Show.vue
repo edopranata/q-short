@@ -40,7 +40,7 @@
                 <!-- URL Info Card -->
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg mb-8">
                     <div class="p-6">
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                             <div>
                                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">URL Information</h3>
                                 <dl class="space-y-3">
@@ -103,6 +103,11 @@
                                         </dd>
                                     </div>
                                 </dl>
+                            </div>
+                            <div>
+                                <div class="flex justify-center">
+                                    <QRCode :url="url.short_url" :size="150" />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -290,6 +295,7 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
+import QRCode from '@/Components/QRCode.vue'
 import { onMounted, onUnmounted, ref, computed, nextTick } from 'vue'
 
 const props = defineProps({

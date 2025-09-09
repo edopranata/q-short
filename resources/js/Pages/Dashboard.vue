@@ -161,16 +161,41 @@ onMounted(async () => {
                         Quick Actions
                     </template>
                     <template #content>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-4">
-                            <Button 
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-6">
+                            <div 
                                 v-for="action in quickActions" 
                                 :key="action.label"
-                                :label="action.label"
-                                :icon="action.icon"
-                                :severity="action.severity"
                                 @click="action.action"
-                                class="w-full"
-                            />
+                                :class="[
+                                    'flex flex-col items-center justify-center',
+                                    'p-6 rounded-lg border-2 border-transparent',
+                                    'bg-white dark:bg-gray-800 shadow-md',
+                                    'hover:shadow-lg hover:border-blue-200 dark:hover:border-blue-600',
+                                    'transition-all duration-200 cursor-pointer',
+                                    'min-h-[120px] w-full',
+                                    'group'
+                                ]"
+                            >
+                                <div class="flex flex-col items-center space-y-3">
+                                    <div :class="[
+                                        'p-4 rounded-full transition-colors duration-200',
+                                        action.severity === 'primary' ? 'bg-blue-100 text-blue-600 group-hover:bg-blue-200' :
+                                        action.severity === 'secondary' ? 'bg-gray-100 text-gray-600 group-hover:bg-gray-200' :
+                                        action.severity === 'info' ? 'bg-cyan-100 text-cyan-600 group-hover:bg-cyan-200' :
+                                        'bg-blue-100 text-blue-600 group-hover:bg-blue-200'
+                                    ]">
+                                        <i :class="[action.icon, 'text-2xl']"></i>
+                                    </div>
+                                    <span :class="[
+                                        'text-sm font-medium text-center leading-tight',
+                                        'text-gray-700 dark:text-gray-300',
+                                        'group-hover:text-gray-900 dark:group-hover:text-white',
+                                        'transition-colors duration-200'
+                                    ]">
+                                        {{ action.label }}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </template>
                 </Card>

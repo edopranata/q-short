@@ -35,6 +35,7 @@ class ShortenedUrl extends Model
 
     protected $appends = [
         'short_url',
+        'clicks',
     ];
 
     /**
@@ -72,6 +73,14 @@ class ShortenedUrl extends Model
     {
         $slug = $this->is_custom && $this->custom_slug ? $this->custom_slug : $this->short_code;
         return url('/s/' . $slug);
+    }
+
+    /**
+     * Get the clicks count (alias for click_count).
+     */
+    public function getClicksAttribute(): int
+    {
+        return $this->click_count ?? 0;
     }
 
     /**

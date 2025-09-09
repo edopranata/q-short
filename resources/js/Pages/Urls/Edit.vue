@@ -223,6 +223,18 @@
                                         <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Expires</dt>
                                         <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">{{ formatDate(url.expires_at) }}</dd>
                                     </div>
+
+                                    <!-- QR Code -->
+                                    <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
+                                        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 text-center mb-3">QR Code</dt>
+                                        <div class="flex justify-center">
+                                            <QRCode 
+                                                :url="url.short_url" 
+                                                :size="150"
+                                                
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <!-- Quick Actions -->
@@ -266,6 +278,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { computed } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
+import QRCode from '@/Components/QRCode.vue'
 
 const props = defineProps({
     url: Object,

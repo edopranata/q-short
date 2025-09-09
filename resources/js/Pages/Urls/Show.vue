@@ -51,7 +51,7 @@
                     <div class="p-6">
                         <h3 class="text-lg font-medium text-gray-900 mb-6">URL Information</h3>
                         
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                             <div class="space-y-4">
                                 <!-- Original URL -->
                                 <div>
@@ -138,6 +138,19 @@
                                     <dd class="mt-1 text-sm text-gray-900">{{ formatDate(url.expires_at) }}</dd>
                                 </div>
                             </div>
+
+                            <!-- QR Code Section -->
+                            <div class="flex flex-col items-center justify-start">
+                                <div class="w-full">
+                                    <dt class="text-sm font-medium text-gray-500 text-center mb-4">QR Code</dt>
+                                    <QRCode 
+                                        :url="url.short_url" 
+                                        :size="180"
+                                        
+                                        class="w-full"
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -207,6 +220,7 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
+import QRCode from '@/Components/QRCode.vue'
 
 const props = defineProps({
     url: Object,
