@@ -239,4 +239,165 @@ class ShortenedUrlTest extends TestCase
             'shortened_url_id' => $url->id,
         ]);
     }
+
+    public function test_authenticated_user_can_create_url_with_custom_slug(): void
+    {
+        $user = User::factory()->create();
+        $user->assignRole('user');
+
+        $urlData = [
+            'original_url' => 'https://example.com/custom-test',
+            'custom_slug' => 'my-custom-link',
+            'title' => 'Custom Slug Test',
+            'description' => 'Testing custom slug functionality',
+            'expires_at' => '',
+        ];
+
+        $response = $this->actingAs($user)->post(route('urls.store'), $urlData);
+
+        $response->assertRedirect(route('urls.index'));
+        $response->assertSessionHas('success', 'URL shortened successfully!');
+
+        $this->assertDatabaseHas('shortened_urls', [
+            'user_id' => $user->id,
+            'original_url' => $urlData['original_url'],
+            'custom_slug' => $urlData['custom_slug'],
+            'is_custom' => true,
+            'title' => $urlData['title'],
+        ]);
+    }
+
+    public function test_custom_slug_redirects_correctly(): void
+    {
+        $url = ShortenedUrl::factory()->create([
+            'original_url' => 'https://example.com/custom-redirect',
+            'custom_slug' => 'test-custom-slug',
+            'is_custom' => true,
+            'is_active' => true,
+        ]);
+
+        $response = $this->get('/s/test-custom-slug');
+
+        $response->assertRedirect('https://example.com/custom-redirect');
+        
+        // Check that click count was incremented
+        $url->refresh();
+        $this->assertEquals(1, $url->click_count);
+    }
+
+    public function test_custom_slug_must_be_unique(): void
+    {
+        $user = User::factory()->create();
+        $user->assignRole('user');
+
+        // Create first URL with custom slug
+        ShortenedUrl::factory()->create([
+            'custom_slug' => 'duplicate-slug',
+            'is_custom' => true,
+        ]);
+
+        // Try to create second URL with same custom slug
+        $urlData = [
+            'original_url' => 'https://example.com/duplicate-test',
+            'custom_slug' => 'duplicate-slug',
+            'expires_at' => '',
+        ];
+
+        $response = $this->actingAs($user)->post(route('urls.store'), $urlData);
+
+        $response->assertSessionHasErrors(['custom_slug']);
+    }
+
+    public function test_custom_slug_validation_format(): void
+    {
+        $user = User::factory()->create();
+        $user->assignRole('user');
+
+        $invalidSlugs = [
+            'ab', // too short
+            'slug with spaces',
+            'slug@with#special!chars',
+            str_repeat('a', 51), // too long
+        ];
+
+        foreach ($invalidSlugs as $invalidSlug) {
+            $urlData = [
+                'original_url' => 'https://example.com/test',
+                'custom_slug' => $invalidSlug,
+                'expires_at' => '',
+            ];
+
+            $response = $this->actingAs($user)->post(route('urls.store'), $urlData);
+            $response->assertSessionHasErrors(['custom_slug']);
+        }
+    }
+
+    public function test_custom_slug_blacklist_validation(): void
+    {
+        $user = User::factory()->create();
+        $user->assignRole('user');
+
+        $blacklistedSlugs = ['admin', 'api', 'www', 'mail', 'ftp'];
+
+        foreach ($blacklistedSlugs as $blacklistedSlug) {
+            $urlData = [
+                'original_url' => 'https://example.com/test',
+                'custom_slug' => $blacklistedSlug,
+                'expires_at' => '',
+            ];
+
+            $response = $this->actingAs($user)->post(route('urls.store'), $urlData);
+            $response->assertSessionHasErrors(['custom_slug']);
+        }
+    }
+
+    public function test_api_check_slug_availability_endpoint(): void
+    {
+        $user = User::factory()->create();
+        $user->assignRole('user');
+
+        // Test available slug
+        $response = $this->actingAs($user)->post('/api/check-slug', [
+            'custom_slug' => 'available-slug'
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJson([
+            'available' => true,
+            'message' => 'Custom slug is available!'
+        ]);
+
+        // Create a URL with custom slug
+        ShortenedUrl::factory()->create([
+            'custom_slug' => 'taken-slug',
+            'is_custom' => true,
+        ]);
+
+        // Test taken slug
+        $response = $this->actingAs($user)->post('/api/check-slug', [
+            'custom_slug' => 'taken-slug'
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJson([
+            'available' => false,
+            'message' => 'This custom slug is already taken.'
+        ]);
+    }
+
+    public function test_api_check_slug_validates_blacklisted_slugs(): void
+    {
+        $user = User::factory()->create();
+        $user->assignRole('user');
+
+        $response = $this->actingAs($user)->post('/api/check-slug', [
+            'custom_slug' => 'admin'
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJson([
+            'available' => false,
+            'message' => 'This custom slug is reserved and cannot be used.'
+        ]);
+    }
 }

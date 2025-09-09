@@ -76,6 +76,9 @@ Route::middleware('auth')->group(function () {
                 ->count()
         ]);
     })->name('api.stats');
+    
+    // Custom slug validation API
+    Route::post('/api/check-slug', [ShortenedUrlController::class, 'checkSlugAvailability'])->name('api.check-slug');
 });
 
 // Public redirect route (no auth required)

@@ -6,6 +6,8 @@ A comprehensive URL shortening application built with Laravel 11, Vue.js 3, and 
 
 ### 🔗 URL Management
 - **URL Shortening**: Convert long URLs into short, memorable links
+- **Custom Slug Support**: Create memorable custom slugs for your URLs (e.g., yoursite.com/my-portfolio)
+- **Real-time Slug Validation**: Check slug availability as you type
 - **Custom Titles & Descriptions**: Add metadata to your shortened URLs
 - **Expiration Control**: Set expiration dates for time-sensitive campaigns
 - **Active/Inactive Status**: Enable or disable URLs as needed
@@ -109,8 +111,15 @@ After running the seeders, you'll have access to:
 1. Log in to your account
 2. Navigate to "My URLs" or click "Create Short URL"
 3. Enter the original URL and optional metadata
-4. Set expiration date if needed
-5. Click "Create Short URL"
+4. **Optional**: Enter a custom slug for a memorable URL (e.g., "my-portfolio")
+5. Set expiration date if needed
+6. Click "Create Short URL"
+
+**Custom Slug Features:**
+- Real-time availability checking
+- Format validation (letters, numbers, hyphens only)
+- Reserved slug protection (admin, api, etc.)
+- Unique constraint enforcement
 
 ### Viewing Analytics
 1. Go to the "Analytics" section
@@ -128,15 +137,17 @@ After running the seeders, you'll have access to:
 
 ### Public Routes
 - `GET /s/{shortCode}` - Redirect to original URL (with analytics tracking)
+- `GET /s/{customSlug}` - Redirect using custom slug (with analytics tracking)
 
 ### Authenticated Routes
 - `GET /urls` - List user's URLs
-- `POST /urls` - Create new shortened URL
+- `POST /urls` - Create new shortened URL (supports custom slug)
 - `GET /urls/{id}` - View URL details
 - `PUT /urls/{id}` - Update URL
 - `DELETE /urls/{id}` - Delete URL
 - `GET /analytics` - Analytics dashboard
 - `GET /analytics/{id}` - Detailed URL analytics
+- `POST /api/check-slug` - Check custom slug availability
 
 ## Testing
 
@@ -149,6 +160,9 @@ php artisan test
 # Run specific test files
 php artisan test --filter=ShortenedUrlTest
 php artisan test --filter=AnalyticsTest
+
+# Test custom slug functionality
+php artisan test --filter="custom slug"
 ```
 
 ## Security Features

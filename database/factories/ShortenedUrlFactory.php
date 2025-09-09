@@ -22,6 +22,8 @@ class ShortenedUrlFactory extends Factory
             'user_id' => User::factory(),
             'original_url' => $this->faker->url(),
             'short_code' => Str::random(6),
+            'custom_slug' => null,
+            'is_custom' => false,
             'title' => $this->faker->sentence(3),
             'description' => $this->faker->optional()->paragraph(),
             'click_count' => 0,
@@ -67,6 +69,28 @@ class ShortenedUrlFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'expires_at' => null,
+        ]);
+    }
+
+    /**
+     * Indicate that the URL has a custom slug.
+     */
+    public function withCustomSlug(string $slug = null): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'custom_slug' => $slug ?? Str::slug($this->faker->words(2, true)),
+            'is_custom' => true,
+        ]);
+    }
+
+    /**
+     * Indicate that the URL uses generated short code (no custom slug).
+     */
+    public function withoutCustomSlug(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'custom_slug' => null,
+            'is_custom' => false,
         ]);
     }
 }

@@ -15,7 +15,12 @@ class UrlRedirectController extends Controller
      */
     public function redirect(Request $request, string $shortCode)
     {
-        $shortenedUrl = ShortenedUrl::where('short_code', $shortCode)
+        // Try to find by custom slug first, then by short code
+        $shortenedUrl = ShortenedUrl::where(function($query) use ($shortCode) {
+                $query->where('custom_slug', $shortCode)
+                      ->where('is_custom', true);
+            })
+            ->orWhere('short_code', $shortCode)
             ->active()
             ->first();
 

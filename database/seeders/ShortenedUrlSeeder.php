@@ -28,12 +28,16 @@ class ShortenedUrlSeeder extends Seeder
             [
                 'original_url' => 'https://laravel.com/docs/11.x/installation',
                 'title' => 'Laravel Installation Guide',
-                'description' => 'Complete guide to installing Laravel framework'
+                'description' => 'Complete guide to installing Laravel framework',
+                'custom_slug' => 'laravel-install',
+                'is_custom' => true
             ],
             [
                 'original_url' => 'https://vuejs.org/guide/introduction.html',
                 'title' => 'Vue.js Introduction',
-                'description' => 'Getting started with Vue.js framework'
+                'description' => 'Getting started with Vue.js framework',
+                'custom_slug' => 'vue-intro',
+                'is_custom' => true
             ],
             [
                 'original_url' => 'https://tailwindcss.com/docs/installation',
@@ -43,7 +47,9 @@ class ShortenedUrlSeeder extends Seeder
             [
                 'original_url' => 'https://github.com/spatie/laravel-permission',
                 'title' => 'Laravel Permission Package',
-                'description' => 'Role and permission management for Laravel'
+                'description' => 'Role and permission management for Laravel',
+                'custom_slug' => 'laravel-permissions',
+                'is_custom' => true
             ],
             [
                 'original_url' => 'https://inertiajs.com/server-side-setup',
@@ -53,7 +59,9 @@ class ShortenedUrlSeeder extends Seeder
             [
                 'original_url' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
                 'title' => 'Never Gonna Give You Up',
-                'description' => 'Classic Rick Astley music video'
+                'description' => 'Classic Rick Astley music video',
+                'custom_slug' => 'rickroll',
+                'is_custom' => true
             ],
             [
                 'original_url' => 'https://docs.docker.com/get-started/',
@@ -63,7 +71,9 @@ class ShortenedUrlSeeder extends Seeder
             [
                 'original_url' => 'https://www.php.net/manual/en/getting-started.php',
                 'title' => 'PHP Getting Started',
-                'description' => 'Official PHP documentation for beginners'
+                'description' => 'Official PHP documentation for beginners',
+                'custom_slug' => 'php-basics',
+                'is_custom' => true
             ],
             [
                 'original_url' => 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide',
@@ -96,10 +106,21 @@ class ShortenedUrlSeeder extends Seeder
             $userUrls = collect($sampleUrls)->shuffle()->take($urlCount);
             
             foreach ($userUrls as $urlData) {
+                // Check if this URL should have a custom slug
+                $hasCustomSlug = isset($urlData['custom_slug']) && isset($urlData['is_custom']);
+                $customSlug = $hasCustomSlug ? $urlData['custom_slug'] : null;
+                
+                // Ensure custom slug is unique if it exists
+                if ($customSlug && ShortenedUrl::where('custom_slug', $customSlug)->exists()) {
+                    $customSlug = $customSlug . '-' . $user->id;
+                }
+                
                 $shortenedUrl = ShortenedUrl::create([
                     'user_id' => $user->id,
                     'original_url' => $urlData['original_url'],
                     'short_code' => $this->generateUniqueShortCode(),
+                    'custom_slug' => $customSlug,
+                    'is_custom' => $hasCustomSlug,
                     'title' => $urlData['title'],
                     'description' => $urlData['description'],
                     'click_count' => 0,

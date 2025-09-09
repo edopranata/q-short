@@ -16,6 +16,8 @@ class ShortenedUrl extends Model
         'user_id',
         'original_url',
         'short_code',
+        'custom_slug',
+        'is_custom',
         'title',
         'description',
         'click_count',
@@ -25,6 +27,7 @@ class ShortenedUrl extends Model
 
     protected $casts = [
         'is_active' => 'boolean',
+        'is_custom' => 'boolean',
         'expires_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
@@ -67,7 +70,8 @@ class ShortenedUrl extends Model
      */
     public function getShortUrlAttribute(): string
     {
-        return url('/s/' . $this->short_code);
+        $slug = $this->is_custom && $this->custom_slug ? $this->custom_slug : $this->short_code;
+        return url('/s/' . $slug);
     }
 
     /**
@@ -84,6 +88,52 @@ class ShortenedUrl extends Model
     public function incrementClicks(): void
     {
         $this->increment('click_count');
+    }
+
+    /**
+     * Validate custom slug format.
+     */
+    public static function validateCustomSlug(string $slug): bool
+    {
+        // Allow alphanumeric, hyphens, and underscores, 3-50 characters
+        return preg_match('/^[a-zA-Z0-9_-]{3,50}$/', $slug);
+    }
+
+    /**
+     * Check if custom slug is available.
+     */
+    public static function isCustomSlugAvailable(string $slug, ?int $excludeId = null): bool
+    {
+        $query = self::where('custom_slug', $slug)
+                    ->orWhere('short_code', $slug);
+        
+        if ($excludeId) {
+            $query->where('id', '!=', $excludeId);
+        }
+        
+        return !$query->exists();
+    }
+
+    /**
+     * Get blacklisted slugs.
+     */
+    public static function getBlacklistedSlugs(): array
+    {
+        return [
+            'admin', 'api', 'www', 'mail', 'ftp', 'localhost', 'dashboard',
+            'login', 'register', 'logout', 'profile', 'settings', 'help',
+            'about', 'contact', 'terms', 'privacy', 'support', 'blog',
+            'news', 'home', 'index', 'create', 'edit', 'delete', 'update',
+            'show', 'list', 'search', 'analytics', 'stats', 'report'
+        ];
+    }
+
+    /**
+     * Check if slug is blacklisted.
+     */
+    public static function isSlugBlacklisted(string $slug): bool
+    {
+        return in_array(strtolower($slug), self::getBlacklistedSlugs());
     }
 
     /**
