@@ -1,11 +1,5 @@
 <script setup>
-import Checkbox from '@/Components/Checkbox.vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import Button from '@/Components/UI/Button.vue';
-import Input from '@/Components/UI/Input.vue';
-import Alert from '@/Components/UI/Alert.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 defineProps({
@@ -23,33 +17,16 @@ const form = useForm({
     remember: false,
 });
 
-const handleButtonClick = (event) => {
-    console.log('Login button clicked - form will submit');
-    // Button click is working, form submission will be handled by @submit.prevent
-};
 
 const submit = () => {
     // Validate form before submission
     if (!form.email || !form.password) {
-        console.warn('Please fill in all required fields');
         return;
     }
     
-    console.log('Submitting login form...');
-    
     form.post(route('login'), {
-        onStart: () => {
-            console.log('Login request started');
-        },
         onFinish: () => {
-            console.log('Login request finished');
             form.reset('password');
-        },
-        onSuccess: (page) => {
-            console.log('Login successful, redirecting...');
-        },
-        onError: (errors) => {
-            console.log('Login failed:', errors);
         }
     });
 };
@@ -59,45 +36,52 @@ const submit = () => {
     <GuestLayout>
         <Head title="Log in" />
 
-        <Alert v-if="status" type="success" class="mb-4">
+        <Message v-if="status" severity="success" class="mb-4">
             {{ status }}
-        </Alert>
+        </Message>
 
         <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
+            <div class="mt-6 space-y-2">
+                <FloatLabel>
+                    <InputText
+                        id="email"
+                        type="email"
+                        class="w-full"
+                        v-model="form.email"
+                        required
+                        autofocus
+                        autocomplete="username"
+                    />
+                    <label for="email">Email</label>
+                </FloatLabel>
 
-                <Input
-                    id="email"
-                    type="email"
-                    class="mt-1"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
-
-                <InputError class="mt-2" :message="form.errors.email" />
+                <InlineMessage v-if="form.errors.email" severity="error" class="block">
+                    {{ form.errors.email }}
+                </InlineMessage>
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+            <div class="mt-6 space-y-2">
+                <FloatLabel>
+                    <InputText
+                        id="password"
+                        type="password"
+                        class="w-full"
+                        v-model="form.password"
+                        required
+                        autocomplete="current-password"
+                        toggleMas
+                    />
+                    <label for="password">Password</label>
+                </FloatLabel>
 
-                <Input
-                    id="password"
-                    type="password"
-                    class="mt-1"
-                    v-model="form.password"
-                    required
-                    autocomplete="current-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password" />
+                <InlineMessage v-if="form.errors.password" severity="error" class="block">
+                    {{ form.errors.password }}
+                </InlineMessage>
             </div>
 
             <div class="mt-4 block">
                 <label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
+                    <Checkbox v-model="form.remember" :binary="true" />
                     <span class="ms-2 text-sm text-gray-600 dark:text-gray-400"
                         >Remember me</span
                     >

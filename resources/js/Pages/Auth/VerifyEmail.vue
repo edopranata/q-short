@@ -1,8 +1,8 @@
 <script setup>
 import { computed } from 'vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
-import Button from '@/Components/UI/Button.vue';
-import Alert from '@/Components/UI/Alert.vue';
+import Button from 'primevue/button';
+import Message from 'primevue/message';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
@@ -32,14 +32,14 @@ const verificationLinkSent = computed(
             didn't receive the email, we will gladly send you another.
         </div>
 
-        <Alert
+        <Message
             v-if="verificationLinkSent"
-            type="success"
+            severity="success"
             class="mb-4"
         >
             A new verification link has been sent to the email address you
             provided during registration.
-        </Alert>
+        </Message>
 
         <form @submit.prevent="submit">
             <div class="mt-4 flex items-center justify-between">

@@ -1,9 +1,5 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import Button from '@/Components/UI/Button.vue';
-import Input from '@/Components/UI/Input.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
@@ -37,55 +33,55 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="email" value="Email" />
+                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
 
-                <Input
+                <InputText
                     id="email"
                     type="email"
-                    class="mt-1"
+                    class="mt-1 w-full"
                     v-model="form.email"
                     required
                     autofocus
                     autocomplete="username"
                 />
 
-                <InputError class="mt-2" :message="form.errors.email" />
+                <InlineMessage v-if="form.errors.email" severity="error" class="mt-2">
+                    {{ form.errors.email }}
+                </InlineMessage>
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
 
-                <Input
+                <InputText
                     id="password"
                     type="password"
-                    class="mt-1"
+                    class="mt-1 w-full"
                     v-model="form.password"
                     required
                     autocomplete="new-password"
                 />
 
-                <InputError class="mt-2" :message="form.errors.password" />
+                <InlineMessage v-if="form.errors.password" severity="error" class="mt-2">
+                    {{ form.errors.password }}
+                </InlineMessage>
             </div>
 
             <div class="mt-4">
-                <InputLabel
-                    for="password_confirmation"
-                    value="Confirm Password"
-                />
+                <label for="password_confirmation" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Confirm Password</label>
 
-                <Input
+                <InputText
                     id="password_confirmation"
                     type="password"
-                    class="mt-1"
+                    class="mt-1 w-full"
                     v-model="form.password_confirmation"
                     required
                     autocomplete="new-password"
                 />
 
-                <InputError
-                    class="mt-2"
-                    :message="form.errors.password_confirmation"
-                />
+                <InlineMessage v-if="form.errors.password_confirmation" severity="error" class="mt-2">
+                    {{ form.errors.password_confirmation }}
+                </InlineMessage>
             </div>
 
             <div class="mt-4 flex items-center justify-end">

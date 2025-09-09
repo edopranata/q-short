@@ -36,7 +36,7 @@
         </template>
 
         <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <!-- URL Info Card -->
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg mb-8">
                     <div class="p-6">

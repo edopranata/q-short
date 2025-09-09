@@ -20,7 +20,7 @@
         </template>
 
         <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <!-- Stats Overview -->
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg">
@@ -125,7 +125,7 @@
                                         <div class="text-right">
                                             <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ url.click_count }} clicks</p>
                                             <Link
-                                                :href="route('analytics.show', url.id)"
+                                                :href="route('analytics.show', { shortenedUrl: url.id })"
                                                 class="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
                                             >
                                                 View details
@@ -209,7 +209,7 @@
                                         </td>
                                         <td class="px-6 py-4 text-right text-sm font-medium">
                                             <Link
-                                                :href="route('analytics.show', url.id)"
+                                                :href="route('analytics.show', { shortenedUrl: url.id })"
                                                 class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
                                             >
                                                 View Analytics

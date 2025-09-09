@@ -21,13 +21,34 @@ class ShortenedUrlController extends Controller
      */
     public function index(): Response
     {
-        $urls = ShortenedUrl::where('user_id', Auth::id())
+        $userId = Auth::id();
+        
+        $urls = ShortenedUrl::where('user_id', $userId)
             ->with('analytics')
             ->latest()
             ->paginate(10);
 
+        // Calculate stats
+        $stats = [
+            'total_urls' => ShortenedUrl::where('user_id', $userId)->count(),
+            'total_clicks' => ShortenedUrl::where('user_id', $userId)->sum('click_count'),
+            'today_clicks' => ShortenedUrl::where('user_id', $userId)
+                ->whereHas('analytics', function($query) {
+                    $query->whereDate('clicked_at', today());
+                })
+                ->withCount(['analytics as today_clicks' => function($query) {
+                    $query->whereDate('clicked_at', today());
+                }])
+                ->get()
+                ->sum('today_clicks'),
+            'active_urls' => ShortenedUrl::where('user_id', $userId)
+                ->where('is_active', true)
+                ->count()
+        ];
+
         return Inertia::render('Urls/Index', [
             'urls' => $urls,
+            'stats' => $stats,
         ]);
     }
 
@@ -67,12 +88,11 @@ class ShortenedUrlController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ShortenedUrl $shortenedUrl): Response
+    public function show(ShortenedUrl $url): Response
     {
-        dd($shortenedUrl);
-        $this->authorize('view', $shortenedUrl);
+        $this->authorize('view', $url);
         
-        $analytics = $shortenedUrl->analytics()
+        $analytics = $url->analytics()
             ->selectRaw('DATE(clicked_at) as date, COUNT(*) as clicks')
             ->groupBy('date')
             ->orderBy('date', 'desc')
@@ -80,7 +100,7 @@ class ShortenedUrlController extends Controller
             ->get();
 
         return Inertia::render('Urls/Show', [
-            'url' => $shortenedUrl->load('analytics'),
+            'url' => $url->load('analytics'),
             'dailyAnalytics' => $analytics,
         ]);
     }
@@ -88,21 +108,21 @@ class ShortenedUrlController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ShortenedUrl $shortenedUrl): Response
+    public function edit(ShortenedUrl $url): Response
     {
-        $this->authorize('update', $shortenedUrl);
+        $this->authorize('update', $url);
         
         return Inertia::render('Urls/Edit', [
-            'url' => $shortenedUrl,
+            'url' => $url,
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ShortenedUrl $shortenedUrl)
+    public function update(Request $request, ShortenedUrl $url)
     {
-        $this->authorize('update', $shortenedUrl);
+        $this->authorize('update', $url);
         
         $validated = $request->validate([
             'title' => 'nullable|string|max:255',
@@ -111,7 +131,7 @@ class ShortenedUrlController extends Controller
             'expires_at' => 'nullable|date|after:now',
         ]);
 
-        $shortenedUrl->update($validated);
+        $url->update($validated);
 
         return redirect()->route('urls.index')
             ->with('success', 'URL updated successfully!');
@@ -120,11 +140,11 @@ class ShortenedUrlController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ShortenedUrl $shortenedUrl)
+    public function destroy(ShortenedUrl $url)
     {
-        $this->authorize('delete', $shortenedUrl);
+        $this->authorize('delete', $url);
         
-        $shortenedUrl->delete();
+        $url->delete(); 
 
         return redirect()->route('urls.index')
             ->with('success', 'URL deleted successfully!');

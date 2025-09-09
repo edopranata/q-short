@@ -1,320 +1,187 @@
 <script setup>
-import { ref } from 'vue';
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import Dropdown from '@/Components/UI/Dropdown.vue';
-import DropdownLink from '@/Components/UI/DropdownLink.vue';
-import NavLink from '@/Components/NavLink.vue';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
+import { ref, computed } from 'vue';
 import ThemeToggle from '@/Components/UI/ThemeToggle.vue';
-import { Link } from '@inertiajs/vue3';
+import { Head, Link, usePage, router } from '@inertiajs/vue3';
+import Menubar from 'primevue/menubar';
+import Badge from 'primevue/badge';
+import Avatar from 'primevue/avatar';
+import Menu from 'primevue/menu';
 
 defineProps({
     title: {
         type: String,
-        required: true,
-    },
+        default: ''
+    }
 });
 
-const showingNavigationDropdown = ref(false);
+const user = computed(() => usePage().props.auth.user);
+
+// User initials for avatar
+const userInitials = computed(() => {
+    return user.value.name.split(' ').map(n => n[0]).join('').toUpperCase();
+});
+
+// User menu items
+const userMenuItems = ref([
+    {
+        label: 'Profile',
+        icon: 'pi pi-user',
+        command: () => {
+            router.visit(route('profile.edit'));
+        }
+    },
+    {
+        separator: true
+    },
+    {
+        label: 'Logout',
+        icon: 'pi pi-sign-out',
+        command: () => {
+            router.post(route('logout'));
+        }
+    }
+]);
+
+const userMenuOpen = ref(false);
+
+// Menu items for MenuBar
+const items = ref([
+    {
+        label: 'Dashboard',
+        template: () => {
+            return `<div class="flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 13H11V3H3V13ZM3 21H11V15H3V21ZM13 21H21V11H13V21ZM13 3V9H21V3H13Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                </svg>
+                <span>Dashboard</span>
+            </div>`;
+        },
+        route: route('dashboard')
+    },
+    {
+        label: 'URLs',
+        template: () => {
+            return `<div class="flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 13C10.4295 13.5741 10.9774 14.0281 11.6066 14.3284C12.2357 14.6287 12.9315 14.7679 13.6344 14.7344C14.3373 14.701 15.0203 14.4957 15.6134 14.1387C16.2065 13.7818 16.6887 13.2848 17.01 12.69L19.07 9.31C19.6441 8.32556 19.8648 7.16353 19.6926 6.02859C19.5204 4.89365 18.9668 3.85482 18.1317 3.10446C17.2966 2.3541 16.2378 1.93617 15.1402 1.92229C14.0426 1.90841 12.9739 2.29934 12.12 3.03L10.91 4.24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M14 11C13.5705 10.4259 13.0226 9.97186 12.3934 9.67157C11.7643 9.37128 11.0685 9.23206 10.3656 9.26558C9.66272 9.2991 8.97965 9.50437 8.38659 9.86126C7.79354 10.2182 7.31132 10.7152 6.99 11.31L4.93 14.69C4.35589 15.6744 4.13517 16.8365 4.30736 17.9714C4.47955 19.1064 5.03315 20.1452 5.86825 20.8955C6.70335 21.6459 7.76221 22.0638 8.85977 22.0777C9.95734 22.0916 11.0261 21.7007 11.88 20.97L13.09 19.76" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>URLs</span>
+            </div>`;
+        },
+        items: [
+            {
+                    label: 'All URLs',
+                    template: () => {
+                        return `<div class="flex items-center gap-2">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M8 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M8 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M3 6H3.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M3 12H3.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M3 18H3.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>All URLs</span>
+                        </div>`;
+                    },
+                route: route('urls.index')
+            },
+            {
+                    label: 'Create URL',
+                    template: () => {
+                        return `<div class="flex items-center gap-2">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                <path d="M12 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            <span>Create URL</span>
+                        </div>`;
+                    },
+                route: route('urls.create')
+            }
+        ]
+    },
+    {
+        label: 'Analytics',
+        template: () => {
+            return `<div class="flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 20V4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M6 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Analytics</span>
+            </div>`;
+        },
+        route: route('analytics.index')
+    }
+]);
+
+const userMenu = ref();
+
+const toggleUserMenu = (event) => {
+    userMenuOpen.value = !userMenuOpen.value;
+    if (userMenu.value) {
+        userMenu.value.toggle(event);
+    }
+};
 </script>
 
 <template>
-    <div>
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-200">
-            <nav
-                class="border-b border-gray-200/60 dark:border-gray-700/60 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md transition-all duration-300 sticky top-0 z-40"
-            >
-                <!-- Primary Navigation Menu -->
-                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div class="flex h-18 justify-between items-center">
-                        <div class="flex items-center">
-                            <!-- Logo -->
-                            <div class="flex shrink-0 items-center">
-                                <Link :href="route('dashboard')" class="group">
-                                    <ApplicationLogo
-                                        class="block h-10 w-auto fill-current text-gray-800 dark:text-gray-200 transition-all duration-300 group-hover:scale-105"
-                                    />
-                                </Link>
-                            </div>
-
-                            <!-- Navigation Links -->
-                            <div
-                                class="hidden sm:flex sm:items-center sm:ml-12 space-x-2"
-                            >
-                                <NavLink
-                                    :href="route('dashboard')"
-                                    :active="route().current('dashboard')"
-                                >
-                                    Dashboard
-                                </NavLink>
-                                <NavLink
-                                    :href="route('urls.index')"
-                                    :active="route().current('urls.*')"
-                                >
-                                    My URLs
-                                </NavLink>
-                                <NavLink
-                                    :href="route('analytics.index')"
-                                    :active="route().current('analytics.*')"
-                                >
-                                    Analytics
-                                </NavLink>
-                            </div>
-                        </div>
-
-                        <div class="hidden sm:flex sm:items-center space-x-3">
-                            <!-- Theme Toggle -->
-                            <div class="p-1">
-                                <ThemeToggle />
-                            </div>
-                            
-                            <!-- Settings Dropdown -->
-                            <div class="relative">
-                                <Dropdown align="right" width="56">
-                                    <template #trigger>
-                                        <button
-                                            type="button"
-                                            class="group flex items-center space-x-3 rounded-xl bg-gray-50 dark:bg-gray-800/50 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
-                                        >
-                                            <!-- User Avatar Placeholder -->
-                                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-sm font-semibold">
-                                                {{ $page.props.auth.user.name.charAt(0).toUpperCase() }}
-                                            </div>
-                                            
-                                            <div class="flex flex-col items-start">
-                                                <span class="text-sm font-medium text-gray-900 dark:text-gray-100">
-                                                    {{ $page.props.auth.user.name }}
-                                                </span>
-                                                <span class="text-xs text-gray-500 dark:text-gray-400">
-                                                    {{ $page.props.auth.user.email }}
-                                                </span>
-                                            </div>
-
-                                            <svg
-                                                class="w-4 h-4 text-gray-400 transition-transform duration-300 group-hover:rotate-180"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 20 20"
-                                                fill="currentColor"
-                                            >
-                                                <path
-                                                    fill-rule="evenodd"
-                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                    clip-rule="evenodd"
-                                                />
-                                            </svg>
-                                        </button>
-                                    </template>
-
-                                    <template #content>
-                                        <DropdownLink
-                                            :href="route('profile.edit')"
-                                        >
-                                            <div class="flex items-center space-x-3">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                                </svg>
-                                                <span>Profile</span>
-                                            </div>
-                                        </DropdownLink>
-                                        <DropdownLink
-                                            :href="route('logout')"
-                                            method="post"
-                                            as="button"
-                                        >
-                                            <div class="flex items-center space-x-3 text-red-600 dark:text-red-400">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                                </svg>
-                                                <span>Log Out</span>
-                                            </div>
-                                        </DropdownLink>
-                                    </template>
-                                </Dropdown>
-                            </div>
-                        </div>
-
-                        <!-- Mobile Menu Button & Theme Toggle -->
-                        <div class="-me-2 flex items-center space-x-2 sm:hidden">
-                            <!-- Mobile Theme Toggle -->
-                            <ThemeToggle />
-                            
-                            <!-- Hamburger -->
-                            <button
-                                @click="
-                                    showingNavigationDropdown =
-                                        !showingNavigationDropdown
-                                "
-                                class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none dark:text-gray-500 dark:hover:text-gray-400 dark:hover:bg-gray-700 dark:focus:bg-gray-700 dark:focus:text-gray-400"
-                            >
-                                <svg
-                                    class="h-6 w-6"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        :class="{
-                                            hidden: showingNavigationDropdown,
-                                            'inline-flex':
-                                                !showingNavigationDropdown,
-                                        }"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                    <path
-                                        :class="{
-                                            hidden: !showingNavigationDropdown,
-                                            'inline-flex':
-                                                showingNavigationDropdown,
-                                        }"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
+    <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <!-- MenuBar Header -->
+        <div class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+            <Menubar :model="items" class="border-none bg-transparent px-4 py-3">
+                <template #start>
+                    <div class="flex items-center">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-3">
+                            <!-- Modern Link/Chain Icon Outline -->
+                            <path d="M9 12L15 12" stroke="var(--p-primary-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M11 6C13.7614 6 16 8.23858 16 11V13C16 15.7614 13.7614 18 11 18H9C6.23858 18 4 15.7614 4 13V11C4 8.23858 6.23858 6 9 6Z" stroke="var(--p-primary-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M13 6C15.7614 6 18 8.23858 18 11V13C18 15.7614 15.7614 18 13 18H15C17.7614 18 20 15.7614 20 13V11C20 8.23858 17.7614 6 15 6Z" stroke="var(--p-primary-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span class="text-lg font-bold text-gray-900 dark:text-white">Q-Shorten</span>
                     </div>
-                </div>
-
-                <!-- Mobile Menu Backdrop -->
-                <Transition
-                    enter-active-class="transition-opacity duration-300 ease-out"
-                    enter-from-class="opacity-0"
-                    enter-to-class="opacity-100"
-                    leave-active-class="transition-opacity duration-200 ease-in"
-                    leave-from-class="opacity-100"
-                    leave-to-class="opacity-0"
-                >
-                    <div
-                        v-show="showingNavigationDropdown"
-                        class="fixed inset-0 z-[40] bg-black/50 backdrop-blur-sm sm:hidden"
-                        @click="showingNavigationDropdown = false"
-                    ></div>
-                </Transition>
-
-                <!-- Responsive Navigation Menu -->
-                <Transition
-                    enter-active-class="transition-transform duration-300 ease-out"
-                    enter-from-class="-translate-x-full"
-                    enter-to-class="translate-x-0"
-                    leave-active-class="transition-transform duration-200 ease-in"
-                    leave-from-class="translate-x-0"
-                    leave-to-class="-translate-x-full"
-                >
-                    <div
-                        v-show="showingNavigationDropdown"
-                        class="fixed top-0 left-0 z-[50] w-80 h-full bg-white dark:bg-gray-900 shadow-2xl sm:hidden overflow-y-auto"
-                    >
-                        <!-- Mobile Menu Header -->
-                        <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                                    <span class="text-white font-bold text-lg">Q</span>
-                                </div>
-                                <div>
-                                    <div class="font-semibold text-gray-900 dark:text-white text-lg">
-                                        Q-Shorten
-                                    </div>
-                                </div>
-                            </div>
-                            <button
-                                @click="showingNavigationDropdown = false"
-                                class="p-2 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
-                            >
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </div>
-
-                        <!-- Navigation Links -->
-                        <div class="px-6 py-6 space-y-2">
-                            <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
-                                </svg>
-                                Dashboard
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('urls.index')" :active="route().current('urls.*')">
-                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                                </svg>
-                                My URLs
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('analytics.index')" :active="route().current('analytics.*')">
-                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                </svg>
-                                Analytics
-                            </ResponsiveNavLink>
-                        </div>
-
-                        <!-- User Profile Section -->
-                        <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
-                            <div class="flex items-center space-x-3 mb-4">
-                                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                                    <span class="text-white font-semibold text-lg">
-                                        {{ $page.props.auth.user.name.charAt(0).toUpperCase() }}
-                                    </span>
-                                </div>
-                                <div class="flex-1">
-                                    <div class="font-semibold text-gray-900 dark:text-white">
-                                        {{ $page.props.auth.user.name }}
-                                    </div>
-                                    <div class="text-sm text-gray-500 dark:text-gray-400">
-                                        {{ $page.props.auth.user.email }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="space-y-2">
-                                <ResponsiveNavLink :href="route('profile.edit')">
-                                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                    </svg>
-                                    Profile
-                                </ResponsiveNavLink>
-                                <ResponsiveNavLink :href="route('logout')" method="post" as="button">
-                                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                    </svg>
-                                    Log Out
-                                </ResponsiveNavLink>
-                            </div>
-                        </div>
-
-                        <!-- Theme Toggle Section -->
-                        <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Theme</span>
-                                <ThemeToggle />
-                            </div>
-                        </div>
+                </template>
+                <template #item="{ item, props, hasSubmenu, root }">
+                    <Link v-if="item.route" :href="item.route" v-ripple class="flex items-center p-menuitem-link px-3 py-2 rounded-md transition-colors duration-200">
+                        <span class="font-medium">{{ item.label }}</span>
+                        <Badge v-if="item.badge" :class="{ 'ml-auto': !root, 'ml-3': root }" :value="item.badge" />
+                        <span v-if="item.shortcut" class="ml-auto border border-surface rounded bg-emphasis text-muted-color text-xs px-2 py-1">{{ item.shortcut }}</span>
+                        <i v-if="hasSubmenu" :class="['pi ml-2', { 'pi-angle-down': root, 'pi-angle-right': !root }]"></i>
+                    </Link>
+                    <a v-else v-ripple class="flex items-center p-menuitem-link px-3 py-2 rounded-md transition-colors duration-200" v-bind="props.action">
+                        <span class="font-medium">{{ item.label }}</span>
+                        <Badge v-if="item.badge" :class="{ 'ml-auto': !root, 'ml-3': root }" :value="item.badge" />
+                        <span v-if="item.shortcut" class="ml-auto border border-surface rounded bg-emphasis text-muted-color text-xs px-2 py-1">{{ item.shortcut }}</span>
+                        <i v-if="hasSubmenu" :class="['pi ml-2', { 'pi-angle-down': root, 'pi-angle-right': !root }]"></i>
+                    </a>
+                </template>
+                <template #end>
+                    <div class="flex items-center gap-3">
+                        <ThemeToggle class="p-2" />
+                        <div class="flex items-center gap-2 pl-2 border-l border-gray-200 dark:border-gray-600">
+                             <Avatar :label="userInitials" shape="circle" class="w-8 h-8 cursor-pointer" @click="toggleUserMenu" />
+                             <span class="text-sm font-medium text-gray-700 dark:text-gray-300 hidden sm:block">{{ user.name }}</span>
+                         </div>
                     </div>
-                </Transition>
-            </nav>
-
-            <!-- Page Heading -->
-            <header
-                class="bg-white dark:bg-gray-800 shadow transition-colors duration-200"
-                v-if="$slots.header"
-            >
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-                        {{ title }}
-                    </h1>
-                    <slot name="header" />
-                </div>
-            </header>
-
-            <!-- Page Content -->
-            <main class="bg-gray-100 dark:bg-gray-900 transition-colors duration-200">
-                <slot />
-            </main>
+                </template>
+            </Menubar>
+            <Menu ref="userMenu" :model="userMenuItems" :popup="true" />
         </div>
+
+        <!-- Page Heading -->
+        <div v-if="$slots.header" class="bg-white dark:bg-gray-800 shadow">
+            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <slot name="header" />
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <main class="flex-1 overflow-y-auto bg-gray-100 dark:bg-gray-900 transition-colors duration-200">
+            <slot />
+        </main>
     </div>
 </template>

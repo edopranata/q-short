@@ -1,9 +1,4 @@
 <script setup>
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import Button from '@/Components/UI/Button.vue';
-import Input from '@/Components/UI/Input.vue';
-import Alert from '@/Components/UI/Alert.vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
 
 defineProps({
@@ -37,67 +32,74 @@ const form = useForm({
 
         <form
             @submit.prevent="form.patch(route('profile.update'))"
-            class="mt-6 space-y-6"
+            class="mt-8 space-y-8"
         >
-            <div>
-                <InputLabel for="name" value="Name" />
+            <div class="space-y-2">
+                <FloatLabel>
+                    <InputText
+                        id="name"
+                        v-model="form.name"
+                        class="w-full"
+                        required
+                        autofocus
+                        autocomplete="name"
+                    />
+                    <label for="name">Name</label>
+                </FloatLabel>
 
-                <Input
-                    id="name"
-                    type="text"
-                    class="mt-1"
-                    v-model="form.name"
-                    required
-                    autofocus
-                    autocomplete="name"
-                />
-
-                <InputError class="mt-2" :message="form.errors.name" />
+                <InlineMessage v-if="form.errors.name" severity="error" class="block">
+                    {{ form.errors.name }}
+                </InlineMessage>
             </div>
 
-            <div>
-                <InputLabel for="email" value="Email" />
+            <div class="space-y-2">
+                <FloatLabel>
+                    <InputText
+                        id="email"
+                        type="email"
+                        v-model="form.email"
+                        class="w-full"
+                        required
+                        autocomplete="username"
+                    />
+                    <label for="email">Email</label>
+                </FloatLabel>
 
-                <Input
-                    id="email"
-                    type="email"
-                    class="mt-1"
-                    v-model="form.email"
-                    required
-                    autocomplete="username"
-                />
-
-                <InputError class="mt-2" :message="form.errors.email" />
+                <InlineMessage v-if="form.errors.email" severity="error" class="block">
+                    {{ form.errors.email }}
+                </InlineMessage>
             </div>
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">
-                <Alert type="warning" class="mt-4">
-                    <template #default>
-                        Your email address is unverified.
-                        <Link
-                            :href="route('verification.send')"
-                            method="post"
-                            as="button"
-                            class="ml-1 text-warning-700 dark:text-warning-300 underline hover:text-warning-800 dark:hover:text-warning-200 focus:outline-none focus:ring-2 focus:ring-warning-500 focus:ring-offset-2"
-                        >
-                            Click here to re-send the verification email.
-                        </Link>
-                    </template>
-                </Alert>
+                <Message severity="warn" class="mt-4">
+                    Your email address is unverified.
+                    <Link
+                        :href="route('verification.send')"
+                        method="post"
+                        as="button"
+                        class="ml-1 text-orange-700 dark:text-orange-300 underline hover:text-orange-800 dark:hover:text-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+                    >
+                        Click here to re-send the verification email.
+                    </Link>
+                </Message>
 
-                <Alert
+                <Message
                     v-show="status === 'verification-link-sent'"
-                    type="success"
+                    severity="success"
                     class="mt-4"
                 >
                     A new verification link has been sent to your email address.
-                </Alert>
+                </Message>
             </div>
 
             <div class="flex items-center gap-4">
-                <Button :disabled="form.processing" :loading="form.processing">
-                    Save
-                </Button>
+                <Button 
+                    type="submit"
+                    :disabled="form.processing" 
+                    :loading="form.processing"
+                    label="Save"
+                    icon="pi pi-check"
+                />
 
                 <Transition
                     enter-active-class="transition ease-in-out"

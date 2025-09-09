@@ -1,5 +1,5 @@
 <template>
-    <Head :title="`URL Details - ${url.title || 'Untitled'}`" />
+    <Head :title="'URL Details - ' + (url.title || 'Untitled')" />
 
     <AuthenticatedLayout>
         <template #header>
@@ -23,7 +23,7 @@
                         Edit URL
                     </Link>
                     <Link
-                        :href="route('analytics.show', url.id)"
+                        :href="route('analytics.show', { shortenedUrl: url.id })"
                         class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200 flex items-center gap-2"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -45,7 +45,7 @@
         </template>
 
         <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <!-- URL Information Card -->
                 <div class="bg-white overflow-hidden shadow-sm rounded-lg mb-8">
                     <div class="p-6">
@@ -158,7 +158,7 @@
                                 Test Link
                             </a>
                             <Link
-                                :href="route('analytics.show', url.id)"
+                                :href="route('analytics.show', { shortenedUrl: url.id })"
                                 class="flex items-center justify-center px-4 py-3 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200"
                             >
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -191,7 +191,7 @@
                         </div>
                         <div class="mt-4">
                             <Link
-                                :href="route('analytics.show', url.id)"
+                                :href="route('analytics.show', { shortenedUrl: url.id })"
                                 class="text-sm text-blue-600 hover:text-blue-800"
                             >
                                 View detailed analytics →

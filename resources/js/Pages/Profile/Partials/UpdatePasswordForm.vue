@@ -1,8 +1,4 @@
 <script setup>
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import Button from '@/Components/UI/Button.vue';
-import Input from '@/Components/UI/Input.vue';
 import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
@@ -46,64 +42,71 @@ const updatePassword = () => {
             </p>
         </header>
 
-        <form @submit.prevent="updatePassword" class="mt-6 space-y-6">
-            <div>
-                <InputLabel for="current_password" value="Current Password" />
+        <form @submit.prevent="updatePassword" class="mt-8 space-y-8">
+            <div class="space-y-2">
+                <FloatLabel>
+                    <Password
+                        id="current_password"
+                        ref="currentPasswordInput"
+                        v-model="form.current_password"
+                        autocomplete="current-password"
+                        :feedback="false"
+                        toggleMask
 
-                <Input
-                    id="current_password"
-                    ref="currentPasswordInput"
-                    v-model="form.current_password"
-                    type="password"
-                    class="mt-1"
-                    autocomplete="current-password"
-                />
+                    />
+                    <label for="current_password">Current Password</label>
+                </FloatLabel>
 
-                <InputError
-                    :message="form.errors.current_password"
-                    class="mt-2"
-                />
+                <InlineMessage v-if="form.errors.current_password" severity="error" class="block">
+                    {{ form.errors.current_password }}
+                </InlineMessage>
             </div>
 
-            <div>
-                <InputLabel for="password" value="New Password" />
+            <div class="space-y-2">
+                <FloatLabel>
+                    <Password
+                        id="password"
+                        ref="passwordInput"
+                        v-model="form.password"
+                        autocomplete="new-password"
+                        :feedback="true"
+                        toggleMask
 
-                <Input
-                    id="password"
-                    ref="passwordInput"
-                    v-model="form.password"
-                    type="password"
-                    class="mt-1"
-                    autocomplete="new-password"
-                />
+                    />
+                    <label for="password">New Password</label>
+                </FloatLabel>
 
-                <InputError :message="form.errors.password" class="mt-2" />
+                <InlineMessage v-if="form.errors.password" severity="error" class="block">
+                    {{ form.errors.password }}
+                </InlineMessage>
             </div>
 
-            <div>
-                <InputLabel
-                    for="password_confirmation"
-                    value="Confirm Password"
-                />
+            <div class="space-y-2">
+                <FloatLabel>
+                    <Password
+                        id="password_confirmation"
+                        v-model="form.password_confirmation"
+                        autocomplete="new-password"
+                        :feedback="false"
+                        toggleMask
 
-                <Input
-                    id="password_confirmation"
-                    v-model="form.password_confirmation"
-                    type="password"
-                    class="mt-1"
-                    autocomplete="new-password"
-                />
+                    />
+                    <label for="password_confirmation">Confirm Password</label>
+                </FloatLabel>
 
-                <InputError
-                    :message="form.errors.password_confirmation"
-                    class="mt-2"
-                />
+                <InlineMessage v-if="form.errors.password_confirmation" severity="error" class="block">
+                    {{ form.errors.password_confirmation }}
+                </InlineMessage>
             </div>
 
             <div class="flex items-center gap-4">
-                <Button :disabled="form.processing" :loading="form.processing">
-                    Save
-                </Button>
+                <Button 
+                    type="submit"
+                    :disabled="form.processing" 
+                    :loading="form.processing"
+                    label="Save"
+                    icon="pi pi-check"
+                />
 
                 <Transition
                     enter-active-class="transition ease-in-out"

@@ -20,72 +20,91 @@
         </template>
 
         <div class="py-12">
-            <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
+            <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <Card>
-                    <div class="p-6">
+                    <template #title>
+                        Create Short URL
+                    </template>
+                    <template #content>
                         <form @submit.prevent="submit" class="space-y-6">
                             <!-- Original URL -->
-                            <div>
-                                <InputLabel for="original_url" value="Original URL *" />
-                                <Input
-                                    id="original_url"
-                                    v-model="form.original_url"
-                                    type="url"
-                                    class="mt-1"
-                                    placeholder="https://example.com/very-long-url"
-                                    required
-                                    autofocus
-                                />
-                                <InputError class="mt-2" :message="form.errors.original_url" />
-                                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                            <div class="space-y-2">
+                                <FloatLabel>
+                                    <InputText
+                                        id="original_url"
+                                        v-model="form.original_url"
+                                        type="url"
+                                        class="w-full"
+                                        placeholder="https://example.com/very-long-url"
+                                        required
+                                        autofocus
+                                    />
+                                    <label for="original_url">Original URL *</label>
+                                </FloatLabel>
+                                <InlineMessage v-if="form.errors.original_url" severity="error" class="block">
+                                    {{ form.errors.original_url }}
+                                </InlineMessage>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">
                                     Enter the long URL you want to shorten
                                 </p>
                             </div>
 
                             <!-- Title -->
-                            <div>
-                                <InputLabel for="title" value="Title (Optional)" />
-                                <Input
-                                    id="title"
-                                    v-model="form.title"
-                                    type="text"
-                                    class="mt-1"
-                                    placeholder="My awesome link"
-                                />
-                                <InputError class="mt-2" :message="form.errors.title" />
-                                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                            <div class="space-y-2">
+                                <FloatLabel>
+                                    <InputText
+                                        id="title"
+                                        v-model="form.title"
+                                        type="text"
+                                        class="w-full"
+                                        placeholder="My awesome link"
+                                    />
+                                    <label for="title">Title (Optional)</label>
+                                </FloatLabel>
+                                <InlineMessage v-if="form.errors.title" severity="error" class="block">
+                                    {{ form.errors.title }}
+                                </InlineMessage>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">
                                     Give your short URL a memorable title
                                 </p>
                             </div>
 
                             <!-- Description -->
-                            <div>
-                                <InputLabel for="description" value="Description (Optional)" />
-                                <textarea
-                                    id="description"
-                                    v-model="form.description"
-                                    class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:border-primary-500 focus:ring-primary-500 rounded-md shadow-sm"
-                                    rows="3"
-                                    placeholder="Brief description of what this link leads to..."
-                                ></textarea>
-                                <InputError class="mt-2" :message="form.errors.description" />
-                                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                            <div class="space-y-2">
+                                <FloatLabel>
+                                    <Textarea
+                                        id="description"
+                                        v-model="form.description"
+                                        class="block w-full"
+                                        rows="3"
+                                        placeholder="Brief description of what this link leads to..."
+                                    />
+                                    <label for="description">Description (Optional)</label>
+                                </FloatLabel>
+                                <InlineMessage v-if="form.errors.description" severity="error" class="block">
+                                    {{ form.errors.description }}
+                                </InlineMessage>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">
                                     Optional description to help you remember what this link is for
                                 </p>
                             </div>
 
                             <!-- Expiration Date -->
-                            <div>
-                                <InputLabel for="expires_at" value="Expiration Date (Optional)" />
-                                <Input
-                                    id="expires_at"
-                                    v-model="form.expires_at"
-                                    type="datetime-local"
-                                    class="mt-1"
-                                    :min="minDateTime"
-                                />
-                                <InputError class="mt-2" :message="form.errors.expires_at" />
-                                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                            <div class="space-y-2">
+                                <FloatLabel>
+                                    <InputText
+                                        id="expires_at"
+                                        v-model="form.expires_at"
+                                        type="datetime-local"
+                                        class="w-full"
+                                        :min="minDateTime"
+                                    />
+                                    <label for="expires_at">Expiration Date (Optional)</label>
+                                </FloatLabel>
+                                <InlineMessage v-if="form.errors.expires_at" severity="error" class="block">
+                                    {{ form.errors.expires_at }}
+                                </InlineMessage>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">
                                     Set when this short URL should stop working (leave empty for no expiration)
                                 </p>
                             </div>
@@ -118,6 +137,7 @@
                                     Cancel
                                 </Link>
                                 <Button
+                                type="submit"
                                     :disabled="form.processing"
                                     :loading="form.processing"
                                     class="flex items-center gap-2"
@@ -129,7 +149,7 @@
                                 </Button>
                             </div>
                         </form>
-                    </div>
+                    </template>
                 </Card>
 
                 <!-- Tips Section -->
@@ -170,11 +190,6 @@
 <script setup>
 import { Head, Link, useForm } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
-import InputError from '@/Components/InputError.vue'
-import InputLabel from '@/Components/InputLabel.vue'
-import Button from '@/Components/UI/Button.vue'
-import Input from '@/Components/UI/Input.vue'
-import Card from '@/Components/UI/Card.vue'
 import { computed } from 'vue'
 
 const form = useForm({

@@ -1,9 +1,6 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
-import Button from '@/Components/UI/Button.vue';
-import Card from '@/Components/UI/Card.vue';
-import Badge from '@/Components/UI/Badge.vue';
 
 defineProps({
     canLogin: {
@@ -102,12 +99,10 @@ onMounted(() => {
                     <template v-else>
                         <Link
                             :href="route('login')"
-                            class="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+                            class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                         >
                             Log in
                         </Link>
-
-                        <!-- Register button hidden - registration disabled -->
                     </template>
                  </nav>
              </div>
@@ -131,51 +126,35 @@ onMounted(() => {
                     <!-- CTA Buttons -->
                     <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
                         <Link
-                            v-if="!$page.props.auth.user"
                             :href="route('login')"
-                            class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                            class="inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
                         >
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                            </svg>
-                            Login to Get Started
+                            Get Started
                         </Link>
-                        <Link
-                            v-else
-                            :href="route('dashboard')"
-                            class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-                        >
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                            </svg>
-                            Go to Dashboard
-                        </Link>
-                        <button class="inline-flex items-center px-6 py-4 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h1m4 0h1m-6 4h1m4 0h1M4 6h16M4 10h16M4 14h16M4 18h16" />
-                            </svg>
-                            View Demo
-                        </button>
                     </div>
                 </div>
 
                 <!-- Stats Section -->
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16" :class="{ 'animate-slide-up': isVisible }">
-                    <div v-for="stat in stats" :key="stat.label" class="text-center p-6 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200 dark:border-gray-700">
-                        <div class="text-3xl mb-2">{{ stat.icon }}</div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 max-w-4xl mx-auto" :class="{ 'animate-slide-up': isVisible }">
+                    <div v-for="stat in stats" :key="stat.label" class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform duration-200">
                         <div class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">{{ stat.value }}</div>
                         <div class="text-gray-600 dark:text-gray-400">{{ stat.label }}</div>
                     </div>
                 </div>
 
                 <!-- Features Section -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" :class="{ 'animate-fade-in-up': isVisible }">
-                    <div v-for="feature in features" :key="feature.title" class="group p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-700">
-                        <div class="flex items-center justify-center w-12 h-12 rounded-xl mb-6 group-hover:scale-110 transition-transform duration-200" :class="feature.color">
-                            <span class="text-2xl">{{ feature.icon }}</span>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">{{ feature.title }}</h3>
-                        <p class="text-gray-600 dark:text-gray-300 leading-relaxed">{{ feature.description }}</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    <div v-for="(feature, index) in features" :key="index" class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 text-center group hover:shadow-xl transition-shadow duration-300">
+                        <div class="text-4xl mb-4 group-hover:scale-110 transition-transform duration-200">{{ feature.icon }}</div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3">{{ feature.title }}</h3>
+                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed">{{ feature.description }}</p>
+                        <span v-if="feature.badge" class="inline-block mt-4 px-3 py-1 text-xs font-medium rounded-full" :class="{
+                            'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200': feature.badge.variant === 'primary',
+                            'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200': feature.badge.variant === 'success',
+                            'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200': feature.badge.variant === 'warning'
+                        }">
+                            {{ feature.badge.text }}
+                        </span>
                     </div>
                 </div>
             </div>

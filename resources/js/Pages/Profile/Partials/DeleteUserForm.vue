@@ -1,9 +1,4 @@
 <script setup>
-import Button from '@/Components/UI/Button.vue';
-import Input from '@/Components/UI/Input.vue';
-import Modal from '@/Components/UI/Modal.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
 import { useForm } from '@inertiajs/vue3';
 import { nextTick, ref } from 'vue';
 
@@ -51,55 +46,69 @@ const closeModal = () => {
             </p>
         </header>
 
-        <Button variant="danger" @click="confirmUserDeletion">
-            Delete Account
-        </Button>
+        <Button 
+            severity="danger" 
+            @click="confirmUserDeletion"
+            label="Delete Account"
+            icon="pi pi-trash"
+        />
 
-        <Modal :show="confirmingUserDeletion" @close="closeModal" title="Delete Account">
+        <Dialog 
+            v-model:visible="confirmingUserDeletion" 
+            @hide="closeModal" 
+            header="Delete Account"
+            :modal="true"
+            :closable="true"
+            class="w-full max-w-lg mx-4"
+        >
             <template #default>
-                <p class="text-sm text-gray-600 dark:text-gray-400">
-                    Once your account is deleted, all of its resources and data
-                    will be permanently deleted. Please enter your password to
-                    confirm you would like to permanently delete your account.
-                </p>
+                <div class="space-y-6">
+                    <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                        Once your account is deleted, all of its resources and data
+                        will be permanently deleted. Please enter your password to
+                        confirm you would like to permanently delete your account.
+                    </p>
 
-                <div class="mt-6">
-                    <InputLabel
-                        for="password"
-                        value="Password"
-                        class="sr-only"
-                    />
+                    <div class="space-y-2">
+                        <FloatLabel>
+                            <Password
+                                id="password"
+                                ref="passwordInput"
+                                v-model="form.password"
+                                class="w-full"
+                                :feedback="false"
+                                toggleMask
 
-                    <Input
-                        id="password"
-                        ref="passwordInput"
-                        v-model="form.password"
-                        type="password"
-                        class="w-3/4"
-                        placeholder="Password"
-                        @keyup.enter="deleteUser"
-                    />
+                                @keyup.enter="deleteUser"
+                            />
+                            <label for="password">Password</label>
+                        </FloatLabel>
 
-                    <InputError :message="form.errors.password" class="mt-2" />
+                        <InlineMessage v-if="form.errors.password" severity="error" class="block">
+                            {{ form.errors.password }}
+                        </InlineMessage>
+                    </div>
                 </div>
             </template>
             
             <template #footer>
                 <div class="flex justify-end gap-3">
-                    <Button variant="outline" @click="closeModal">
-                        Cancel
-                    </Button>
+                    <Button 
+                        severity="secondary" 
+                        @click="closeModal"
+                        label="Cancel"
+                    />
 
                     <Button
-                        variant="danger"
+                        severity="danger"
                         :disabled="form.processing"
                         :loading="form.processing"
                         @click="deleteUser"
-                    >
-                        Delete Account
-                    </Button>
+                        label="Delete Account"
+                        icon="pi pi-trash"
+                    />
                 </div>
             </template>
-        </Modal>
+        </Dialog>
     </section>
 </template>

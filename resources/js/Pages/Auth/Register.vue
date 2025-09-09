@@ -1,9 +1,5 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import Button from '@/Components/UI/Button.vue';
-import Input from '@/Components/UI/Input.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 const form = useForm({
@@ -25,71 +21,77 @@ const submit = () => {
         <Head title="Register" />
 
         <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="name" value="Name" />
+            <div class="space-y-2">
+                <FloatLabel>
+                    <InputText
+                        id="name"
+                        type="text"
+                        class="w-full"
+                        v-model="form.name"
+                        required
+                        autofocus
+                        autocomplete="name"
+                    />
+                    <label for="name">Name</label>
+                </FloatLabel>
 
-                <Input
-                    id="name"
-                    type="text"
-                    class="mt-1"
-                    v-model="form.name"
-                    required
-                    autofocus
-                    autocomplete="name"
-                />
-
-                <InputError class="mt-2" :message="form.errors.name" />
+                <InlineMessage v-if="form.errors.name" severity="error" class="block">
+                    {{ form.errors.name }}
+                </InlineMessage>
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="email" value="Email" />
+            <div class="mt-4 space-y-2">
+                <FloatLabel>
+                    <InputText
+                        id="email"
+                        type="email"
+                        class="w-full"
+                        v-model="form.email"
+                        required
+                        autocomplete="username"
+                    />
+                    <label for="email">Email</label>
+                </FloatLabel>
 
-                <Input
-                    id="email"
-                    type="email"
-                    class="mt-1"
-                    v-model="form.email"
-                    required
-                    autocomplete="username"
-                />
-
-                <InputError class="mt-2" :message="form.errors.email" />
+                <InlineMessage v-if="form.errors.email" severity="error" class="block">
+                    {{ form.errors.email }}
+                </InlineMessage>
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+            <div class="mt-4 space-y-2">
+                <FloatLabel>
+                    <InputText
+                        id="password"
+                        type="password"
+                        class="w-full"
+                        v-model="form.password"
+                        required
+                        autocomplete="new-password"
+                    />
+                    <label for="password">Password</label>
+                </FloatLabel>
 
-                <Input
-                    id="password"
-                    type="password"
-                    class="mt-1"
-                    v-model="form.password"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password" />
+                <InlineMessage v-if="form.errors.password" severity="error" class="block">
+                    {{ form.errors.password }}
+                </InlineMessage>
             </div>
 
-            <div class="mt-4">
-                <InputLabel
-                    for="password_confirmation"
-                    value="Confirm Password"
-                />
+            <div class="mt-4 space-y-2">
+                <FloatLabel>
+                    <InputText
+                        id="password_confirmation"
+                        type="password"
+                        class="w-full"
+                        v-model="form.password_confirmation"
+                        required
+                        autocomplete="new-password"
+                    />
+                    <label for="password_confirmation">Confirm Password</label>
+                </FloatLabel>
 
-                <Input
-                    id="password_confirmation"
-                    type="password"
-                    class="mt-1"
-                    v-model="form.password_confirmation"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError
-                    class="mt-2"
-                    :message="form.errors.password_confirmation"
-                />
+                <InlineMessage v-if="form.errors.password_confirmation" severity="error" class="block">
+                    {{ form.errors.password_confirmation }}
+                </InlineMessage>
             </div>
 
             <div class="mt-4 flex items-center justify-end">

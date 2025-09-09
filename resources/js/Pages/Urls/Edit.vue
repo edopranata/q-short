@@ -9,7 +9,8 @@
                 </h2>
                 <div class="flex gap-2">
                     <Link
-                        :href="route('analytics.show', url.id)"
+                        v-if="url.id"
+                        :href="route('analytics.show', { shortenedUrl: url.id })"
                         class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition duration-200 flex items-center gap-2"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -31,72 +32,86 @@
         </template>
 
         <div class="py-12">
-            <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+            <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <!-- Edit Form -->
                     <div class="lg:col-span-2">
                         <Card>
-                            <div class="p-6">
-                                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-6">Edit URL Details</h3>
-                                
+                            <template #title>
+                                Edit URL Details
+                            </template>
+                            <template #content>
                                 <form @submit.prevent="submit" class="space-y-6">
                                     <!-- Title -->
-                                    <div>
-                                        <InputLabel for="title" value="Title" />
-                                        <Input
-                                            id="title"
-                                            v-model="form.title"
-                                            type="text"
-                                            class="mt-1"
-                                            placeholder="My awesome link"
-                                        />
-                                        <InputError class="mt-2" :message="form.errors.title" />
+                                    <div class="space-y-2">
+                                        <FloatLabel>
+                                            <InputText
+                                                id="title"
+                                                v-model="form.title"
+                                                type="text"
+                                                class="w-full"
+                                                placeholder="My awesome link"
+                                            />
+                                            <label for="title">Title</label>
+                                        </FloatLabel>
+                                        <InlineMessage v-if="form.errors.title" severity="error" class="block">
+                                            {{ form.errors.title }}
+                                        </InlineMessage>
                                     </div>
 
                                     <!-- Description -->
-                                    <div>
-                                        <InputLabel for="description" value="Description" />
-                                        <textarea
-                                            id="description"
-                                            v-model="form.description"
-                                            class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:border-primary-500 focus:ring-primary-500 rounded-md shadow-sm"
-                                            rows="3"
-                                            placeholder="Brief description of what this link leads to..."
-                                        ></textarea>
-                                        <InputError class="mt-2" :message="form.errors.description" />
+                                    <div class="space-y-2">
+                                        <FloatLabel>
+                                            <Textarea
+                                                id="description"
+                                                v-model="form.description"
+                                                class="block w-full"
+                                                rows="3"
+                                                placeholder="Brief description of what this link leads to..."
+                                            />
+                                            <label for="description">Description</label>
+                                        </FloatLabel>
+                                        <InlineMessage v-if="form.errors.description" severity="error" class="block">
+                                            {{ form.errors.description }}
+                                        </InlineMessage>
                                     </div>
 
                                     <!-- Status -->
                                     <div>
-                                        <InputLabel for="is_active" value="Status" />
+                                        <label for="is_active" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>
                                         <div class="mt-2">
                                             <label class="inline-flex items-center">
-                                                <input
+                                                <Checkbox
                                                     id="is_active"
                                                     v-model="form.is_active"
-                                                    type="checkbox"
-                                                    class="rounded border-gray-300 dark:border-gray-600 text-primary-600 shadow-sm focus:ring-primary-500 dark:bg-gray-700"
-                                                >
+                                                    :binary="true"
+                                                />
                                                 <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">
                                                     Active (URL can be accessed)
                                                 </span>
                                             </label>
                                         </div>
-                                        <InputError class="mt-2" :message="form.errors.is_active" />
+                                        <InlineMessage v-if="form.errors.is_active" severity="error" class="mt-2">
+                                            {{ form.errors.is_active }}
+                                        </InlineMessage>
                                     </div>
 
                                     <!-- Expiration Date -->
-                                    <div>
-                                        <InputLabel for="expires_at" value="Expiration Date" />
-                                        <Input
-                                            id="expires_at"
-                                            v-model="form.expires_at"
-                                            type="datetime-local"
-                                            class="mt-1"
-                                            :min="minDateTime"
-                                        />
-                                        <InputError class="mt-2" :message="form.errors.expires_at" />
-                                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                    <div class="space-y-2">
+                                        <FloatLabel>
+                                            <InputText
+                                                id="expires_at"
+                                                v-model="form.expires_at"
+                                                type="datetime-local"
+                                                class="w-full"
+                                                :min="minDateTime"
+                                            />
+                                            <label for="expires_at">Expiration Date</label>
+                                        </FloatLabel>
+                                        <InlineMessage v-if="form.errors.expires_at" severity="error" class="block">
+                                            {{ form.errors.expires_at }}
+                                        </InlineMessage>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">
                                             Leave empty for no expiration
                                         </p>
                                     </div>
@@ -126,16 +141,17 @@
                                         </Button>
                                     </div>
                                 </form>
-                            </div>
+                            </template>
                         </Card>
                     </div>
 
                     <!-- URL Info Sidebar -->
                     <div class="lg:col-span-1">
                         <Card>
-                            <div class="p-6">
-                                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">URL Information</h3>
-                                
+                            <template #title>
+                                URL Information
+                            </template>
+                            <template #content>
                                 <div class="space-y-4">
                                     <!-- Original URL -->
                                     <div>
@@ -224,7 +240,8 @@
                                             Test Link
                                         </a>
                                         <Link
-                            :href="route('analytics.show', url.id)"
+                                            v-if="url.id"
+                            :href="route('analytics.show', { shortenedUrl: url.id })"
                             class="w-full inline-flex justify-center items-center px-3 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200"
                         >
                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -234,7 +251,7 @@
                                         </Link>
                                     </div>
                                 </div>
-                            </div>
+                            </template>
                         </Card>
                     </div>
                 </div>
@@ -246,11 +263,6 @@
 <script setup>
 import { Head, Link, useForm } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
-import InputError from '@/Components/InputError.vue'
-import InputLabel from '@/Components/InputLabel.vue'
-import Button from '@/Components/UI/Button.vue'
-import Input from '@/Components/UI/Input.vue'
-import Card from '@/Components/UI/Card.vue'
 import { computed } from 'vue'
 
 const props = defineProps({

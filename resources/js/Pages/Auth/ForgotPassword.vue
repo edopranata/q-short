@@ -1,10 +1,5 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import Button from '@/Components/UI/Button.vue';
-import Input from '@/Components/UI/Input.vue';
-import Alert from '@/Components/UI/Alert.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 
 defineProps({
@@ -32,29 +27,31 @@ const submit = () => {
             you to choose a new one.
         </div>
 
-        <Alert
+        <Message
             v-if="status"
-            type="success"
+            severity="success"
             class="mb-4"
         >
             {{ status }}
-        </Alert>
+        </Message>
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="email" value="Email" />
+                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
 
-                <Input
+                <InputText
                     id="email"
                     type="email"
-                    class="mt-1"
+                    class="mt-1 w-full"
                     v-model="form.email"
                     required
                     autofocus
                     autocomplete="username"
                 />
 
-                <InputError class="mt-2" :message="form.errors.email" />
+                <InlineMessage v-if="form.errors.email" severity="error" class="mt-2">
+                    {{ form.errors.email }}
+                </InlineMessage>
             </div>
 
             <div class="mt-4 flex items-center justify-end">

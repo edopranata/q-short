@@ -1,9 +1,5 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import Button from '@/Components/UI/Button.vue';
-import Input from '@/Components/UI/Input.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 
 const form = useForm({
@@ -28,17 +24,19 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="password" value="Password" />
-                <Input
+                <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
+                <InputText
                     id="password"
                     type="password"
-                    class="mt-1"
+                    class="mt-1 w-full"
                     v-model="form.password"
                     required
                     autocomplete="current-password"
                     autofocus
                 />
-                <InputError class="mt-2" :message="form.errors.password" />
+                <InlineMessage v-if="form.errors.password" severity="error" class="mt-2">
+                    {{ form.errors.password }}
+                </InlineMessage>
             </div>
 
             <div class="mt-4 flex justify-end">
