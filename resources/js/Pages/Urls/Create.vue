@@ -242,6 +242,11 @@ import { Head, Link, useForm } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { computed, ref, watch } from 'vue'
 import axios from 'axios'
+import { useToast } from 'primevue/usetoast'
+import { useConfirm } from 'primevue/useconfirm'
+
+const toast = useToast()
+const confirm = useConfirm()
 
 const form = useForm({
     original_url: '',
@@ -316,10 +321,45 @@ const minDateTime = computed(() => {
 })
 
 const submit = () => {
-    form.post(route('urls.store'), {
-        onFinish: () => {
-            // Keep form data on validation errors
+    confirm.require({
+        message: `Are you sure you want to create a short URL for "${form.original_url}"?`,
+        header: 'Create URL Confirmation',
+        icon: 'pi pi-question-circle',
+        rejectLabel: 'Cancel',
+        acceptLabel: 'Create URL',
+        rejectClass: 'p-button-secondary p-button-outlined',
+        acceptClass: 'p-button-primary',
+        accept: () => {
+            form.post(route('urls.store'), {
+                onSuccess: () => {
+                    toast.add({
+                        severity: 'success',
+                        summary: 'Success',
+                        detail: 'Short URL created successfully',
+                        life: 3000
+                    })
+                },
+                onError: () => {
+                    toast.add({
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'Failed to create short URL',
+                        life: 3000
+                    })
+                },
+                onFinish: () => {
+                    // Keep form data on validation errors
+                },
+            })
         },
+        reject: () => {
+            toast.add({
+                severity: 'info',
+                summary: 'Cancelled',
+                detail: 'URL creation cancelled',
+                life: 2000
+            })
+        }
     })
 }
 </script>

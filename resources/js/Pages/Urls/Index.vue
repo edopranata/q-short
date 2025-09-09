@@ -157,6 +157,12 @@ import { useUrlStore } from '@/stores/url'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
 import Tag from 'primevue/tag'
+import Badge from 'primevue/badge'
+import Button from 'primevue/button'
+import Card from 'primevue/card'
+import DataTable from 'primevue/datatable'
+import Column from 'primevue/column'
+import Message from 'primevue/message'
 
 const props = defineProps({
     urls: Object,
@@ -225,9 +231,11 @@ const copyToClipboard = async (text) => {
 
 const deleteUrl = (url) => {
     confirm.require({
-        message: `Are you sure you want to delete "${url.title || url.original_url}"?`,
+        message: `Are you sure you want to delete URL "${url.title || url.original_url}"? This action cannot be undone.`,
         header: 'Delete Confirmation',
         icon: 'pi pi-exclamation-triangle',
+        rejectLabel: 'Cancel',
+        acceptLabel: 'Delete',
         rejectClass: 'p-button-secondary p-button-outlined',
         acceptClass: 'p-button-danger',
         accept: () => {
@@ -235,7 +243,7 @@ const deleteUrl = (url) => {
                 onSuccess: () => {
                     toast.add({
                         severity: 'success',
-                        summary: 'Deleted',
+                        summary: 'Success',
                         detail: 'URL deleted successfully',
                         life: 3000
                     })
@@ -248,6 +256,15 @@ const deleteUrl = (url) => {
                         life: 3000
                     })
                 }
+            })
+        },
+        reject: () => {
+            // Optional: Show cancelled message
+            toast.add({
+                severity: 'info',
+                summary: 'Cancelled',
+                detail: 'URL deletion cancelled',
+                life: 2000
             })
         }
     })

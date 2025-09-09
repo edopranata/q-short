@@ -77,6 +77,38 @@ Route::middleware('auth')->group(function () {
         ]);
     })->name('api.stats');
     
+    Route::get('/api/urls-dashboard', function () {
+        $userId = Auth::id();
+        
+        $urls = ShortenedUrl::where('user_id', $userId)
+            ->with('analytics')
+            ->latest()
+            ->limit(5)
+            ->get();
+            
+        $stats = [
+            'total_urls' => ShortenedUrl::where('user_id', $userId)->count(),
+            'total_clicks' => ShortenedUrl::where('user_id', $userId)->sum('click_count'),
+            'today_clicks' => ShortenedUrl::where('user_id', $userId)
+                ->whereHas('analytics', function($query) {
+                    $query->whereDate('clicked_at', today());
+                })
+                ->withCount(['analytics as today_clicks' => function($query) {
+                    $query->whereDate('clicked_at', today());
+                }])
+                ->get()
+                ->sum('today_clicks'),
+            'active_urls' => ShortenedUrl::where('user_id', $userId)
+                ->where('is_active', true)
+                ->count()
+        ];
+        
+        return response()->json([
+            'urls' => $urls,
+            'stats' => $stats
+        ]);
+    });
+    
     // Custom slug validation API
     Route::post('/api/check-slug', [ShortenedUrlController::class, 'checkSlugAvailability'])->name('api.check-slug');
 });

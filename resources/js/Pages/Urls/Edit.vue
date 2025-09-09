@@ -264,10 +264,15 @@
 import { Head, Link, useForm } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { computed } from 'vue'
+import { useToast } from 'primevue/usetoast'
+import { useConfirm } from 'primevue/useconfirm'
 
 const props = defineProps({
     url: Object,
 })
+
+const toast = useToast()
+const confirm = useConfirm()
 
 const form = useForm({
     title: props.url.title || '',
@@ -302,10 +307,45 @@ const copyToClipboard = async (text) => {
 }
 
 const submit = () => {
-    form.put(route('urls.update', props.url.id), {
-        onFinish: () => {
-            // Keep form data on validation errors
+    confirm.require({
+        message: `Are you sure you want to update URL "${props.url.title || props.url.original_url}"?`,
+        header: 'Update URL Confirmation',
+        icon: 'pi pi-question-circle',
+        rejectLabel: 'Cancel',
+        acceptLabel: 'Update URL',
+        rejectClass: 'p-button-secondary p-button-outlined',
+        acceptClass: 'p-button-primary',
+        accept: () => {
+            form.put(route('urls.update', props.url.id), {
+                onSuccess: () => {
+                    toast.add({
+                        severity: 'success',
+                        summary: 'Success',
+                        detail: 'URL updated successfully',
+                        life: 3000
+                    })
+                },
+                onError: () => {
+                    toast.add({
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'Failed to update URL',
+                        life: 3000
+                    })
+                },
+                onFinish: () => {
+                    // Keep form data on validation errors
+                },
+            })
         },
+        reject: () => {
+            toast.add({
+                severity: 'info',
+                summary: 'Cancelled',
+                detail: 'URL update cancelled',
+                life: 2000
+            })
+        }
     })
 }
 </script>

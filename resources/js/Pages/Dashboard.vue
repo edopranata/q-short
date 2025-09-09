@@ -98,9 +98,9 @@ const refreshStats = async () => {
     }
 };
 
-onMounted(() => {
-    // Dashboard doesn't need to fetch URLs automatically
-    // Users can navigate to URLs page manually
+onMounted(async () => {
+    // Fetch URLs to populate Recent URLs section without redirecting
+    await urlStore.fetchUrlsForDashboard();
 });
 </script>
 
@@ -137,7 +137,7 @@ onMounted(() => {
                 </Card>
 
                 <!-- Stats Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-6 gap-6 mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                     <Card v-for="stat in statsCards" :key="stat.title" class="hover:shadow-lg transition-shadow">
                         <template #title>
                             {{ stat.title }}

@@ -198,6 +198,41 @@ export const useUrlStore = defineStore('url', () => {
         }
     };
 
+    const fetchUrlsForDashboard = async () => {
+        loading.value = true;
+        error.value = null;
+        
+        try {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            const response = await fetch('/api/urls-dashboard', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': csrfToken || ''
+                },
+                credentials: 'same-origin'
+            });
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP ${response.status}: ${errorText}`);
+            }
+            
+            const data = await response.json();
+            urls.value = data.urls || [];
+            if (data.stats) {
+                stats.value = data.stats;
+            }
+        } catch (err) {
+            error.value = err.message;
+            console.error('Error fetching URLs for dashboard:', err);
+        } finally {
+            loading.value = false;
+        }
+    };
+
     return {
         // State
         urls,
@@ -215,6 +250,7 @@ export const useUrlStore = defineStore('url', () => {
         
         // Actions
         fetchUrls,
+        fetchUrlsForDashboard,
         createUrl,
         updateUrl,
         deleteUrl,

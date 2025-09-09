@@ -75,7 +75,6 @@ const closeModal = () => {
                                 id="password"
                                 ref="passwordInput"
                                 v-model="form.password"
-                                class="w-full"
                                 :feedback="false"
                                 toggleMask
 
