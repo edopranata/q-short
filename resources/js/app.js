@@ -43,6 +43,7 @@ import InlineMessage from 'primevue/inlinemessage';
 import ToggleButton from 'primevue/togglebutton';
 import Textarea from 'primevue/textarea';
 import FloatLabel from 'primevue/floatlabel';
+import DatePicker from 'primevue/datepicker';
 import Tooltip from 'primevue/tooltip';
 import Ripple from 'primevue/ripple';
 
@@ -104,6 +105,7 @@ createInertiaApp({
         app.component('ToggleButton', ToggleButton);
         app.component('Textarea', Textarea);
         app.component('FloatLabel', FloatLabel);
+        app.component('DatePicker', DatePicker);
         
         // Initialize theme after app is created
         const themeStore = useThemeStore();

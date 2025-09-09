@@ -140,12 +140,17 @@
                             <!-- Expiration Date -->
                             <div class="space-y-2">
                                 <FloatLabel>
-                                    <InputText
+                                    <DatePicker
                                         id="expires_at"
                                         v-model="form.expires_at"
-                                        type="datetime-local"
+                                        showTime
+                                        hourFormat="24"
+                                        dateFormat="yy-mm-dd"
+                                        :minDate="minDate"
                                         class="w-full"
-                                        :min="minDateTime"
+                                        placeholder="Select expiration date and time"
+                                        :showIcon="true"
+                                        iconDisplay="input"
                                     />
                                     <label for="expires_at">Expiration Date (Optional)</label>
                                 </FloatLabel>
@@ -252,7 +257,7 @@ const form = useForm({
     original_url: '',
     title: '',
     description: '',
-    expires_at: '',
+    expires_at: null,
     custom_slug: '',
 })
 
@@ -314,10 +319,8 @@ const baseUrl = computed(() => {
     return window.location.origin
 })
 
-const minDateTime = computed(() => {
-    const now = new Date()
-    now.setMinutes(now.getMinutes() - now.getTimezoneOffset())
-    return now.toISOString().slice(0, 16)
+const minDate = computed(() => {
+    return new Date()
 })
 
 const submit = () => {

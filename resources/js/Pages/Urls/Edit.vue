@@ -99,12 +99,17 @@
                                     <!-- Expiration Date -->
                                     <div class="space-y-2">
                                         <FloatLabel>
-                                            <InputText
+                                            <DatePicker
                                                 id="expires_at"
                                                 v-model="form.expires_at"
-                                                type="datetime-local"
+                                                showTime
+                                                hourFormat="24"
+                                                dateFormat="yy-mm-dd"
+                                                :minDate="minDate"
                                                 class="w-full"
-                                                :min="minDateTime"
+                                                placeholder="Select expiration date and time"
+                                                :showIcon="true"
+                                                iconDisplay="input"
                                             />
                                             <label for="expires_at">Expiration Date</label>
                                         </FloatLabel>
@@ -288,16 +293,15 @@ const toast = useToast()
 const confirm = useConfirm()
 
 const form = useForm({
+    original_url: props.url.original_url,
     title: props.url.title || '',
     description: props.url.description || '',
     is_active: props.url.is_active,
-    expires_at: props.url.expires_at ? new Date(props.url.expires_at).toISOString().slice(0, 16) : '',
+    expires_at: props.url.expires_at ? new Date(props.url.expires_at) : null,
 })
 
-const minDateTime = computed(() => {
-    const now = new Date()
-    now.setMinutes(now.getMinutes() - now.getTimezoneOffset())
-    return now.toISOString().slice(0, 16)
+const minDate = computed(() => {
+    return new Date()
 })
 
 const formatDate = (dateString) => {
