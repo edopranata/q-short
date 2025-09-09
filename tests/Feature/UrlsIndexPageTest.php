@@ -343,6 +343,8 @@ class UrlsIndexPageTest extends TestCase
                         ->has('updated_at')
                         ->has('short_url')
                         ->has('analytics')
+                        ->has('custom_slug')
+                        ->has('is_custom')
                 )
         );
     }
