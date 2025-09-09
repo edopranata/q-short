@@ -1,162 +1,106 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import Card from '@/Components/UI/Card.vue';
+import Button from '@/Components/UI/Button.vue';
 import { Head, Link } from '@inertiajs/vue3';
+
+defineProps({
+    stats: {
+        type: Object,
+        default: () => ({
+            totalUrls: 0,
+            totalClicks: 0,
+            todayClicks: 0
+        })
+    }
+});
 </script>
 
 <template>
     <Head title="Dashboard" />
 
-    <AuthenticatedLayout>
-        <template #header>
-            <div class="flex justify-between items-center">
-                <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                    Dashboard
-                </h2>
-                <Link
-                    :href="route('urls.create')"
-                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200 flex items-center gap-2"
-                >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                    </svg>
-                    Create Short URL
-                </Link>
-            </div>
-        </template>
-
+    <AuthenticatedLayout title="Dashboard">
         <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <!-- Welcome Section -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-8">
-                    <div class="p-6">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <h3 class="text-lg font-medium text-gray-900">Welcome to Q-Shorten!</h3>
-                                <p class="mt-1 text-sm text-gray-600">
-                                    Your powerful URL shortening and analytics platform.
-                                </p>
+                <Card class="mb-8">
+                    <div class="text-center">
+                        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+                            Welcome to Q-Short!
+                        </h1>
+                        <p class="text-lg text-gray-600 dark:text-gray-400 mb-6">
+                            Shorten your URLs and track their performance with ease.
+                        </p>
+                        <Button as="a" :href="route('urls.create')" size="lg">
+                            Create Short URL
+                        </Button>
+                    </div>
+                </Card>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <Card>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-2">
+                                {{ stats.totalUrls }}
                             </div>
-                            <div class="hidden sm:block">
-                                <svg class="h-16 w-16 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                                </svg>
+                            <div class="text-sm font-medium text-gray-600 dark:text-gray-400">
+                                Total URLs
                             </div>
                         </div>
-                    </div>
+                    </Card>
+                    
+                    <Card>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">
+                                {{ stats.totalClicks }}
+                            </div>
+                            <div class="text-sm font-medium text-gray-600 dark:text-gray-400">
+                                Total Clicks
+                            </div>
+                        </div>
+                    </Card>
+                    
+                    <Card>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+                                {{ stats.todayClicks }}
+                            </div>
+                            <div class="text-sm font-medium text-gray-600 dark:text-gray-400">
+                                Today's Clicks
+                            </div>
+                        </div>
+                    </Card>
                 </div>
 
                 <!-- Quick Actions -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <Link
-                        :href="route('urls.create')"
-                        class="bg-white overflow-hidden shadow-sm rounded-lg hover:shadow-md transition-shadow duration-200 group"
-                    >
-                        <div class="p-6">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0">
-                                    <svg class="h-8 w-8 text-blue-600 group-hover:text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                    </svg>
-                                </div>
-                                <div class="ml-4">
-                                    <h3 class="text-lg font-medium text-gray-900 group-hover:text-blue-700">Create Short URL</h3>
-                                    <p class="text-sm text-gray-500">Shorten a new URL with custom options</p>
-                                </div>
-                            </div>
-                        </div>
-                    </Link>
-
-                    <Link
-                        :href="route('urls.index')"
-                        class="bg-white overflow-hidden shadow-sm rounded-lg hover:shadow-md transition-shadow duration-200 group"
-                    >
-                        <div class="p-6">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0">
-                                    <svg class="h-8 w-8 text-green-600 group-hover:text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                                    </svg>
-                                </div>
-                                <div class="ml-4">
-                                    <h3 class="text-lg font-medium text-gray-900 group-hover:text-green-700">Manage URLs</h3>
-                                    <p class="text-sm text-gray-500">View and edit your shortened URLs</p>
-                                </div>
-                            </div>
-                        </div>
-                    </Link>
-
-                    <Link
-                        :href="route('analytics.index')"
-                        class="bg-white overflow-hidden shadow-sm rounded-lg hover:shadow-md transition-shadow duration-200 group"
-                    >
-                        <div class="p-6">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0">
-                                    <svg class="h-8 w-8 text-purple-600 group-hover:text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                    </svg>
-                                </div>
-                                <div class="ml-4">
-                                    <h3 class="text-lg font-medium text-gray-900 group-hover:text-purple-700">View Analytics</h3>
-                                    <p class="text-sm text-gray-500">Track performance and insights</p>
-                                </div>
-                            </div>
-                        </div>
-                    </Link>
-                </div>
-
-                <!-- Features Overview -->
-                <div class="bg-white overflow-hidden shadow-sm rounded-lg">
-                    <div class="p-6">
-                        <h3 class="text-lg font-medium text-gray-900 mb-6">Platform Features</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="flex items-start gap-3">
-                                <div class="flex-shrink-0">
-                                    <svg class="h-6 w-6 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h4 class="text-sm font-medium text-gray-900">Custom Short URLs</h4>
-                                    <p class="text-sm text-gray-500">Create memorable short links with custom titles and descriptions</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start gap-3">
-                                <div class="flex-shrink-0">
-                                    <svg class="h-6 w-6 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h4 class="text-sm font-medium text-gray-900">Detailed Analytics</h4>
-                                    <p class="text-sm text-gray-500">Track clicks, locations, devices, and referrer information</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start gap-3">
-                                <div class="flex-shrink-0">
-                                    <svg class="h-6 w-6 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h4 class="text-sm font-medium text-gray-900">Expiration Control</h4>
-                                    <p class="text-sm text-gray-500">Set expiration dates for time-sensitive campaigns</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start gap-3">
-                                <div class="flex-shrink-0">
-                                    <svg class="h-6 w-6 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h4 class="text-sm font-medium text-gray-900">Secure & Reliable</h4>
-                                    <p class="text-sm text-gray-500">Enterprise-grade security with 99.9% uptime guarantee</p>
-                                </div>
-                            </div>
-                        </div>
+                <Card>
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                        Quick Actions
+                    </h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <Button as="a" :href="route('urls.create')" variant="outline" class="justify-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            Create URL
+                        </Button>
+                        
+                        <Button as="a" :href="route('urls.index')" variant="outline" class="justify-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                            View All URLs
+                        </Button>
+                        
+                        <Button as="a" :href="route('profile.edit')" variant="outline" class="justify-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                            Edit Profile
+                        </Button>
                     </div>
-                </div>
+                </Card>
             </div>
         </div>
     </AuthenticatedLayout>

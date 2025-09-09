@@ -3,8 +3,9 @@ import Checkbox from '@/Components/Checkbox.vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import Button from '@/Components/UI/Button.vue';
+import Input from '@/Components/UI/Input.vue';
+import Alert from '@/Components/UI/Alert.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 defineProps({
@@ -22,9 +23,34 @@ const form = useForm({
     remember: false,
 });
 
+const handleButtonClick = (event) => {
+    console.log('Login button clicked - form will submit');
+    // Button click is working, form submission will be handled by @submit.prevent
+};
+
 const submit = () => {
+    // Validate form before submission
+    if (!form.email || !form.password) {
+        console.warn('Please fill in all required fields');
+        return;
+    }
+    
+    console.log('Submitting login form...');
+    
     form.post(route('login'), {
-        onFinish: () => form.reset('password'),
+        onStart: () => {
+            console.log('Login request started');
+        },
+        onFinish: () => {
+            console.log('Login request finished');
+            form.reset('password');
+        },
+        onSuccess: (page) => {
+            console.log('Login successful, redirecting...');
+        },
+        onError: (errors) => {
+            console.log('Login failed:', errors);
+        }
     });
 };
 </script>
@@ -33,18 +59,18 @@ const submit = () => {
     <GuestLayout>
         <Head title="Log in" />
 
-        <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
+        <Alert v-if="status" type="success" class="mb-4">
             {{ status }}
-        </div>
+        </Alert>
 
         <form @submit.prevent="submit">
             <div>
                 <InputLabel for="email" value="Email" />
 
-                <TextInput
+                <Input
                     id="email"
                     type="email"
-                    class="mt-1 block w-full"
+                    class="mt-1"
                     v-model="form.email"
                     required
                     autofocus
@@ -57,10 +83,10 @@ const submit = () => {
             <div class="mt-4">
                 <InputLabel for="password" value="Password" />
 
-                <TextInput
+                <Input
                     id="password"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="mt-1"
                     v-model="form.password"
                     required
                     autocomplete="current-password"
@@ -72,7 +98,7 @@ const submit = () => {
             <div class="mt-4 block">
                 <label class="flex items-center">
                     <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600"
+                    <span class="ms-2 text-sm text-gray-600 dark:text-gray-400"
                         >Remember me</span
                     >
                 </label>
@@ -82,18 +108,20 @@ const submit = () => {
                 <Link
                     v-if="canResetPassword"
                     :href="route('password.request')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    class="rounded-md text-sm text-gray-600 dark:text-gray-400 underline hover:text-gray-900 dark:hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                 >
                     Forgot your password?
                 </Link>
 
-                <PrimaryButton
+                <Button
                     class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
+                    :loading="form.processing"
+                    type="submit"
+                    @click="handleButtonClick"
                 >
                     Log in
-                </PrimaryButton>
+                </Button>
             </div>
         </form>
     </GuestLayout>

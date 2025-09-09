@@ -28,72 +28,72 @@
 
                 <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                    <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg">
                         <div class="p-6">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0">
-                                    <svg class="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="h-8 w-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                                     </svg>
                                 </div>
                                 <div class="ml-5 w-0 flex-1">
                                     <dl>
-                                        <dt class="text-sm font-medium text-gray-500 truncate">Total URLs</dt>
-                                        <dd class="text-lg font-medium text-gray-900">{{ urls.total }}</dd>
+                                        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Total URLs</dt>
+                                        <dd class="text-lg font-medium text-gray-900 dark:text-gray-100">{{ urls.total }}</dd>
                                     </dl>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg">
                         <div class="p-6">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0">
-                                    <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="h-8 w-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
                                     </svg>
                                 </div>
                                 <div class="ml-5 w-0 flex-1">
                                     <dl>
-                                        <dt class="text-sm font-medium text-gray-500 truncate">Total Clicks</dt>
-                                        <dd class="text-lg font-medium text-gray-900">{{ totalClicks }}</dd>
+                                        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Total Clicks</dt>
+                                        <dd class="text-lg font-medium text-gray-900 dark:text-gray-100">{{ totalClicks }}</dd>
                                     </dl>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg">
                         <div class="p-6">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0">
-                                    <svg class="h-8 w-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="h-8 w-8 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                                     </svg>
                                 </div>
                                 <div class="ml-5 w-0 flex-1">
                                     <dl>
-                                        <dt class="text-sm font-medium text-gray-500 truncate">Active URLs</dt>
-                                        <dd class="text-lg font-medium text-gray-900">{{ activeUrls }}</dd>
+                                        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Active URLs</dt>
+                                        <dd class="text-lg font-medium text-gray-900 dark:text-gray-100">{{ activeUrls }}</dd>
                                     </dl>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg">
                         <div class="p-6">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0">
-                                    <svg class="h-8 w-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="h-8 w-8 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                                     </svg>
                                 </div>
                                 <div class="ml-5 w-0 flex-1">
                                     <dl>
-                                        <dt class="text-sm font-medium text-gray-500 truncate">Avg. Clicks</dt>
-                                        <dd class="text-lg font-medium text-gray-900">{{ averageClicks }}</dd>
+                                        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Avg. Clicks</dt>
+                                        <dd class="text-lg font-medium text-gray-900 dark:text-gray-100">{{ averageClicks }}</dd>
                                     </dl>
                                 </div>
                             </div>
@@ -102,52 +102,52 @@
                 </div>
 
                 <!-- URLs Table -->
-                <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg">
                     <div class="p-6">
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
+                                <thead class="bg-gray-50 dark:bg-gray-700">
                                     <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                             URL
                                         </th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                             Short Code
                                         </th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                             Clicks
                                         </th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                             Status
                                         </th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                             Created
                                         </th>
-                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                             Actions
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr v-for="url in urls.data" :key="url.id" class="hover:bg-gray-50">
+                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                    <tr v-for="url in urls.data" :key="url.id" class="hover:bg-gray-50 dark:hover:bg-gray-700">
                                         <td class="px-6 py-4">
                                             <div>
-                                                <div class="text-sm font-medium text-gray-900">
+                                                <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
                                                     {{ url.title || 'Untitled' }}
                                                 </div>
-                                                <div class="text-sm text-gray-500 truncate max-w-xs">
+                                                <div class="text-sm text-gray-500 dark:text-gray-400 truncate max-w-xs">
                                                     {{ url.original_url }}
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="px-6 py-4">
                                             <div class="flex items-center gap-2">
-                                                <code class="text-sm bg-gray-100 px-2 py-1 rounded">
+                                                <code class="text-sm bg-gray-100 dark:bg-gray-700 dark:text-gray-200 px-2 py-1 rounded">
                                                     {{ url.short_url }}
                                                 </code>
                                                 <button
                                                     @click="copyToClipboard(url.short_url)"
-                                                    class="text-gray-400 hover:text-gray-600 transition-colors"
+                                                    class="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors"
                                                     title="Copy to clipboard"
                                                 >
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -156,7 +156,7 @@
                                                 </button>
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 text-sm text-gray-900">
+                                        <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
                                             {{ url.click_count }}
                                         </td>
                                         <td class="px-6 py-4">
@@ -170,14 +170,14 @@
                                                 {{ url.is_active ? 'Active' : 'Inactive' }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 text-sm text-gray-500">
+                                        <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                                             {{ formatDate(url.created_at) }}
                                         </td>
                                         <td class="px-6 py-4 text-right text-sm font-medium">
                                             <div class="flex justify-end gap-2">
                                                 <Link
                                                     :href="route('analytics.show', url.id)"
-                                                    class="text-blue-600 hover:text-blue-900 transition-colors"
+                                                    class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
                                                     title="View Analytics"
                                                 >
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -186,7 +186,7 @@
                                                 </Link>
                                                 <Link
                                                     :href="route('urls.edit', url.id)"
-                                                    class="text-indigo-600 hover:text-indigo-900 transition-colors"
+                                                    class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors"
                                                     title="Edit"
                                                 >
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -195,7 +195,7 @@
                                                 </Link>
                                                 <button
                                                     @click="deleteUrl(url)"
-                                                    class="text-red-600 hover:text-red-900 transition-colors"
+                                                    class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition-colors"
                                                     title="Delete"
                                                 >
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -216,21 +216,21 @@
                                     <Link
                                         v-if="urls.prev_page_url"
                                         :href="urls.prev_page_url"
-                                        class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                                        class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
                                     >
                                         Previous
                                     </Link>
                                     <Link
                                         v-if="urls.next_page_url"
                                         :href="urls.next_page_url"
-                                        class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                                        class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
                                     >
                                         Next
                                     </Link>
                                 </div>
                                 <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                                     <div>
-                                        <p class="text-sm text-gray-700">
+                                        <p class="text-sm text-gray-700 dark:text-gray-300">
                                             Showing {{ urls.from }} to {{ urls.to }} of {{ urls.total }} results
                                         </p>
                                     </div>
@@ -242,8 +242,8 @@
                                                 :href="link.url"
                                                 v-html="link.label"
                                                 :class="{
-                                                    'bg-blue-50 border-blue-500 text-blue-600': link.active,
-                                                    'bg-white border-gray-300 text-gray-500 hover:bg-gray-50': !link.active,
+                                                    'bg-blue-50 border-blue-500 text-blue-600 dark:bg-blue-900 dark:border-blue-400 dark:text-blue-300': link.active,
+                                                    'bg-white border-gray-300 text-gray-500 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700': !link.active,
                                                     'cursor-not-allowed opacity-50': !link.url
                                                 }"
                                                 class="relative inline-flex items-center px-2 py-2 border text-sm font-medium"

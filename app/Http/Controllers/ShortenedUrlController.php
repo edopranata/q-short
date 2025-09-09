@@ -69,6 +69,7 @@ class ShortenedUrlController extends Controller
      */
     public function show(ShortenedUrl $shortenedUrl): Response
     {
+        dd($shortenedUrl);
         $this->authorize('view', $shortenedUrl);
         
         $analytics = $shortenedUrl->analytics()

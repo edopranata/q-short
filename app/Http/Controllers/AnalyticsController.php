@@ -143,7 +143,6 @@ class AnalyticsController extends Controller
             })
             ->sortDesc()
             ->take(10);
-
         return Inertia::render('Analytics/Show', [
             'url' => $shortenedUrl,
             'analytics' => [

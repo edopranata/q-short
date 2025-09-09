@@ -14,13 +14,34 @@ const props = defineProps({
 
 const classes = computed(() =>
     props.active
-        ? 'inline-flex items-center px-1 pt-1 border-b-2 border-indigo-400 text-sm font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out'
-        : 'inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out',
+        ? 'group relative inline-flex items-center px-4 py-3 text-sm font-semibold text-blue-600 dark:text-blue-400 transition-all duration-300 ease-out'
+        : 'group relative inline-flex items-center px-4 py-3 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-all duration-300 ease-out',
 );
 </script>
 
 <template>
     <Link :href="href" :class="classes">
-        <slot />
+        <!-- Content -->
+        <span class="relative z-10">
+            <slot />
+        </span>
+        
+        <!-- Active indicator -->
+        <div 
+            v-if="active" 
+            class="absolute bottom-0 left-1/2 h-0.5 w-8 -translate-x-1/2 rounded-full bg-blue-600 dark:bg-blue-400 transition-all duration-300"
+        ></div>
+        
+        <!-- Hover indicator -->
+        <div 
+            v-else
+            class="absolute bottom-0 left-1/2 h-0.5 w-0 -translate-x-1/2 rounded-full bg-gray-400 dark:bg-gray-500 transition-all duration-300 group-hover:w-6"
+        ></div>
+        
+        <!-- Background hover effect -->
+        <div 
+            class="absolute inset-0 rounded-lg bg-gray-50 dark:bg-gray-800/50 opacity-0 transition-all duration-300 group-hover:opacity-100"
+            :class="{ 'opacity-100 bg-blue-50 dark:bg-blue-900/20': active }"
+        ></div>
     </Link>
 </template>
