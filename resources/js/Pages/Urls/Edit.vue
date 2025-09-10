@@ -106,7 +106,6 @@
                                                 hourFormat="24"
                                                 dateFormat="yy-mm-dd"
                                                 :minDate="minDate"
-                                                class="w-full"
                                                 placeholder="Select expiration date and time"
                                                 :showIcon="true"
                                                 iconDisplay="input"
